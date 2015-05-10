@@ -3,6 +3,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-sass');
   grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-typescript');
 
   grunt.initConfig({
     //Automatisch alle abhängigkeiten in die Index.html einfügen
@@ -12,10 +13,13 @@ module.exports = function (grunt) {
       },
       myTarget: {
         files: {
-          'app/index.html': 'app/index.tpl.html'
+          'app/index.html': 'app/index.tpl.html',
+          'app/elements.html': 'app/elements.tpl.html',
         }
       }
     },
+    
+
     //Sass Dateien Kompilieren
     sass: {
       options:
@@ -52,6 +56,7 @@ module.exports = function (grunt) {
         tasks: ['sass'],
         options: {
           spawn: false,
+          livereload:true
         },
       },
 

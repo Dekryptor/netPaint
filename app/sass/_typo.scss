@@ -1,0 +1,25 @@
+@import url(http://fonts.googleapis.com/css?family=Abel|Mandali);
+
+// font-family: 'Mandali', sans-serif;
+// font-family: 'Abel', sans-serif;
+*{
+	font-family: 'Mandali',sans-serif;
+	color: rgba(255, 255, 255, 0.91);
+}
+
+h1,h2,h3,h4,h5,h6{
+	font-family: 'Abel','sans-serif';
+}
+
+p, pre, small{
+	line-height: 25px;
+}
+
+q{
+	font-style: italic;
+    font-variant: small-caps;
+}
+
+p > a{
+	color: $color-accent;
+}
