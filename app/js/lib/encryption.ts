@@ -2,7 +2,7 @@ class EncryptionHandler{
 	private key : CryptoKey;
 	private iv;
 
-	constructor(keydata : string, initVektor :Int8Array){
+	constructor(keydata : string, initVektor? :Int8Array){
 		var self = this;
 		if(initVektor == undefined || initVektor.length ==0){
 			//Einen initierungsvektor erstellen, wenn keiner übergeben.
@@ -19,7 +19,7 @@ class EncryptionHandler{
 			});
 		});		
 	}
-	
+
 	
 	sha256 = function(str) {
 		  // String in einen Arraybuffer umwandeln
@@ -46,10 +46,11 @@ class EncryptionHandler{
 		} 
 		var self = this;
 		var vektor = self.iv;
+		var buffer = new TextEncoder("utf-8").encode(data);
 		//Neuen Promise erstellen, welcher bei Erfolg den String zurück gibt
 		return new Promise(function(resolve, reject) {
 	   
-	   		crypto.subtle.decrypt({name:"AES-CBC",iv:vektor},self.key,data).then(function(msg){
+	   		crypto.subtle.decrypt({name:"AES-CBC",iv:vektor},self.key,buffer).then(function(msg){
 				   var byteArray = new Uint8Array(msg);
 				   var encodedMsg = '';
 				   //Byte Array zu String codieren
@@ -62,6 +63,8 @@ class EncryptionHandler{
 				   else{
 					   reject();
 				   }
+			},function(params) {
+				reject(params);
 			});
 		});	
 	}
@@ -71,5 +74,14 @@ class EncryptionHandler{
 		return this.iv;
 	}
 		
+	
+}
+
+
+class defaultEncryptionHandler extends EncryptionHandler{
+	constructor(){
+		var vek = new Uint8Array([38, 86, 215, 184, 230, 210, 185, 187, 139, 141, 157, 192, 67, 41, 251, 58])
+		super("none",vek);
+	}
 	
 }
