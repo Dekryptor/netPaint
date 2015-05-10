@@ -1,11 +1,22 @@
+<!Doctype html>
 <html>
 	<head>
-		  <link href="css/main.css" rel="stylesheet" type="text/css">
-		  
+		<title>Netpaint 0.1</title>
+		<meta charset="utf-8"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1"/>
 		
+		<!-- Include all the Libs and CSS Files. Done by Grunt with <3  -->
+		  <link href="css/main.css" rel="stylesheet" type="text/css">
+		  <script src="js/lib/encryption.js"></script>
+		  <script src="js/lib/livereload.js"></script>
+		  <script src="js/lib/networking.js"></script>
 	</head>
 	<body>
-		
+			<div class="container menu">
+				<h1 class="colored">Suchen...</h1>
+				<canvas class="backcanvas"></canvas>
+			</div>
+			<!-- App Entrypoint -->
 	 	  <script src="js/app.js"></script>
 	</body>
 	
