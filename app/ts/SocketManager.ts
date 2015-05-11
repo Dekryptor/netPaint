@@ -3,10 +3,10 @@
 /// <reference path="definitions/promise.ts"/>
 // Sould be ws://borsti1.inf.fh-flensburg.de:8080
 class SocketManager {
-	ws : WebSocket;
-	cryptoManager: EncryptionHandler;
-	session : String;
-	MessageListners = new Array;
+	private ws : WebSocket;
+	private cryptoManager: EncryptionHandler;
+	
+	Messages :Array<Message> = new Array();
 	
 	
 	constructor(url :string){
@@ -17,7 +17,6 @@ class SocketManager {
 			console.log("Verbindung Geöffnet.");
 			//Generellen CryptoManager laden.
 			self.cryptoManager = new defaultEncryptionHandler();
-			self.session="none";
 		}
 	
 		this.ws.addEventListener('message',  function (message :MessageEvent) {
@@ -26,17 +25,18 @@ class SocketManager {
 			.then(function(params : string) 
 				{
 			  	var envelope : Message = JSON.parse(params);
-				console.log("Topic:" +envelope.topic);
-				console.log("Data: " +envelope.data);
-				
-				//
-				var event = new CustomEvent(envelope.topic, envelope.data); 	
-				}, 
-				function(error) 
+				//Speichere die Letzten 10 Nachrrichten im Speicher
+				self.Messages.unshift(envelope);
+				if(self.Messages.length>=10){
+					self.Messages.splice(10,1);
+				}
+				console.log(self.Messages);
+				})
+				 
+			.catch(	function(error) 
 				{
 				//Catch the Unsucsessful Decryption
-				var event = new CustomEvent("unencrypted", message.data);
-				
+
 				});
 		} );
 		
@@ -49,20 +49,28 @@ class SocketManager {
 			'topic': topic,
 			'data' : data
 		};
-		this.cryptoManager.encryptString(JSON.stringify(envelope)).then(function(encryptedMessage :string) {
-		
-			self.ws.send(encryptedMessage);
-			console.log("Send:" + envelope +" as :" +encryptedMessage);
-		})
+		this.cryptoManager.encryptString(JSON.stringify(envelope))
+			.then(function(encryptedMessage :string) 
+			{
+				self.ws.send(encryptedMessage);
+			})
+			.catch(function(params) {
+				throw new Error("Konnte nicht Verschlüsseln");
+			})
 	}
 	
-	addMessageListner(topic: String, callback: Function){
-		this.MessageListners.push({'topic':topic,'func':callback});
+	
+	public set EncryptionHandler(v : EncryptionHandler) {
+		if(v == null || v== undefined){
+			this.cryptoManager = new defaultEncryptionHandler();
+		}
+		else{
+			this.cryptoManager = v;	
+		}
 	}
 	
-	removeEventListener(callback: Function){
-		
-	}
+	
+	
 	
 	
 }

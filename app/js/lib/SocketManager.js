@@ -4,7 +4,7 @@
 // Sould be ws://borsti1.inf.fh-flensburg.de:8080
 var SocketManager = (function () {
     function SocketManager(url) {
-        this.MessageListners = new Array;
+        this.Messages = new Array();
         this.ws = new WebSocket(url);
         var self = this;
         this.ws.onopen = function (params) {
@@ -17,13 +17,13 @@ var SocketManager = (function () {
             //Nachricht enschlüsseln
             self.cryptoManager.decryptJSON(message.data).then(function (params) {
                 var envelope = JSON.parse(params);
-                console.log("Topic:" + envelope.topic);
-                console.log("Data: " + envelope.data);
-                //
-                var event = new CustomEvent(envelope.topic, envelope.data);
-            }, function (error) {
+                self.Messages.unshift(envelope);
+                if (self.Messages.length >= 10) {
+                    self.Messages.splice(10, 1);
+                }
+                console.log(self.Messages);
+            }).catch(function (error) {
                 //Catch the Unsucsessful Decryption
-                var event = new CustomEvent("unencrypted", message.data);
             });
         });
     }
@@ -35,7 +35,8 @@ var SocketManager = (function () {
         };
         this.cryptoManager.encryptString(JSON.stringify(envelope)).then(function (encryptedMessage) {
             self.ws.send(encryptedMessage);
-            console.log("Send:" + envelope + " as :" + encryptedMessage);
+        }).catch(function (params) {
+            throw new Error("Konnte nicht Verschlüsseln");
         });
     };
     SocketManager.prototype.addMessageListner = function (topic, callback) {
