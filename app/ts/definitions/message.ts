@@ -1,4 +1,4 @@
 interface Message{
-	topic:String;
-	data:String;	
+	topic	:string;
+	data	:string;	
 }

@@ -30,38 +30,68 @@ var EncryptionHandler = (function () {
             return hash;
         });
     };
-    EncryptionHandler.prototype.encrypt = function (message) {
+    EncryptionHandler.prototype.arrayBufferToString = function (buf) {
+        return new TextDecoder('utf-8').decode(buf);
+    };
+    EncryptionHandler.prototype.encryptString = function (data) {
+        var self = this;
+        var buffer = new TextEncoder('utf-8').encode(data);
+        return new Promise(function (resolve, reject) {
+            self.encryptBuffer(buffer).then(function (ergebnis) {
+                var bufferArray = new Uint8Array(ergebnis);
+                resolve(JSON.stringify(bufferArray));
+            }).catch(function (reason) {
+                reject(reason);
+            });
+        });
+    };
+    EncryptionHandler.prototype.encryptBuffer = function (data) {
+        var self = this;
         if (this.key == null) {
             throw new Error("Cryptokey ist nicht initialisiert.");
         }
-        if (message.length == 0) {
-            throw new Error("Leere Nachrrichten können nicht verschlüsselt werden");
-        }
-        var buffer = new TextEncoder("utf-8").encode(message);
-        return crypto.subtle.encrypt({ name: "AES-CBC", iv: this.iv }, this.key, buffer);
+        return new Promise(function (resolve, reject) {
+            crypto.subtle.encrypt({ name: "AES-CBC", iv: self.iv }, self.key, data).then(function (encryptedBuffer) {
+                resolve(encryptedBuffer);
+            }, function (params) {
+                reject(params);
+            });
+        });
     };
-    EncryptionHandler.prototype.decrypt = function (data) {
+    EncryptionHandler.prototype.decryptJSON = function (data) {
+        var self = this;
+        return new Promise(function (resolve, reject) {
+            //Aus der JSON wieder einen Buffer erzeugen - Da der Server keine Binäre Übertragung unterstüzt.
+            var obj = JSON.parse(data);
+            var arr = [];
+            for (var i in obj) {
+                arr[i] = obj[i];
+            }
+            var buffer = new Uint8Array(arr).buffer;
+            //Buffer entschlüsseln
+            self.decryptBuffer(buffer).then(function (decryptedBuffer) {
+                //Aus Buffer wieder einen String machen
+                resolve(new TextDecoder('utf-8').decode(decryptedBuffer));
+            }).catch(function (reason) {
+                reject(reason);
+            });
+        });
+    };
+    EncryptionHandler.prototype.decryptBuffer = function (data) {
+        var self = this;
         if (this.iv == null) {
             throw new Error("Initialisierungsvektor nicht Gesetzt");
         }
-        var self = this;
-        var vektor = self.iv;
-        var buffer = new TextEncoder("utf-8").encode(data);
+        else if (self.key == null) {
+            throw new Error("Key ist nicht initialisiert");
+        }
+        //var buffer : ArrayBufferView = new TextEncoder("utf-8").encode(data);
         //Neuen Promise erstellen, welcher bei Erfolg den String zurück gibt
         return new Promise(function (resolve, reject) {
-            crypto.subtle.decrypt({ name: "AES-CBC", iv: vektor }, self.key, buffer).then(function (msg) {
-                var byteArray = new Uint8Array(msg);
-                var encodedMsg = '';
-                for (var i in byteArray) {
-                    encodedMsg = encodedMsg + String.fromCharCode(byteArray[i]);
-                }
-                if (encodedMsg.length > 0) {
-                    resolve(encodedMsg);
-                }
-                else {
-                    reject();
-                }
+            crypto.subtle.decrypt({ name: "AES-CBC", iv: self.iv }, self.key, data).then(function (decryptedBuffer) {
+                resolve(decryptedBuffer);
             }, function (params) {
+                console.log("Etwas lief falsch");
                 reject(params);
             });
         });
