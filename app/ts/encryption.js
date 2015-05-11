@@ -11,10 +11,10 @@ var EncryptionHandler = (function () {
         if (initVektor == undefined || initVektor.length == 0) {
             //Einen initierungsvektor erstellen, wenn keiner übergeben.
             this.iv = window.crypto.getRandomValues(new Uint8Array(16));
-        }
-        else {
+        } else {
             this.iv = initVektor;
         }
+
         //Aus dem Raumnamen einen 256bit Hash erstellen.
         this.sha256(keydata).then(function (digest) {
             crypto.subtle.importKey("raw", digest, "AES-CBC", true, ["encrypt", "decrypt"]).then(function (keyObj) {
@@ -30,6 +30,7 @@ var EncryptionHandler = (function () {
             return hash;
         });
     };
+
     EncryptionHandler.prototype.encrypt = function (message) {
         if (this.key == null) {
             throw new Error("Cryptokey ist nicht initialisiert.");
@@ -40,6 +41,7 @@ var EncryptionHandler = (function () {
         var buffer = new TextEncoder("utf-8").encode(message);
         return crypto.subtle.encrypt({ name: "AES-CBC", iv: this.iv }, this.key, buffer);
     };
+
     EncryptionHandler.prototype.decrypt = function (data) {
         if (this.iv == null) {
             throw new Error("Initialisierungsvektor nicht Gesetzt");
@@ -47,18 +49,19 @@ var EncryptionHandler = (function () {
         var self = this;
         var vektor = self.iv;
         var buffer = new TextEncoder("utf-8").encode(data);
+
         //Neuen Promise erstellen, welcher bei Erfolg den String zurück gibt
         return new Promise(function (resolve, reject) {
             crypto.subtle.decrypt({ name: "AES-CBC", iv: vektor }, self.key, buffer).then(function (msg) {
                 var byteArray = new Uint8Array(msg);
                 var encodedMsg = '';
+
                 for (var i in byteArray) {
                     encodedMsg = encodedMsg + String.fromCharCode(byteArray[i]);
                 }
                 if (encodedMsg.length > 0) {
                     resolve(encodedMsg);
-                }
-                else {
+                } else {
                     reject();
                 }
             }, function (params) {
@@ -66,6 +69,7 @@ var EncryptionHandler = (function () {
             });
         });
     };
+
     Object.defineProperty(EncryptionHandler.prototype, "initVektor", {
         //IV Lesbar machen
         get: function () {
@@ -76,6 +80,7 @@ var EncryptionHandler = (function () {
     });
     return EncryptionHandler;
 })();
+
 var defaultEncryptionHandler = (function (_super) {
     __extends(defaultEncryptionHandler, _super);
     function defaultEncryptionHandler() {

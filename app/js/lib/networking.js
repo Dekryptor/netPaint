@@ -1,28 +1,26 @@
 /// <reference path="encryption.ts"/>
-/// <reference path="message.ts"/>
+/// <reference path="definitions/message.ts"/>
+/// <reference path="definitions/promise.ts"/>
 // Sould be ws://borsti1.inf.fh-flensburg.de:8080
 var NetworkManager = (function () {
     function NetworkManager(url) {
         this.ws = new WebSocket(url);
         var self = this;
-
         this.ws.onopen = function (params) {
             console.log("Verbindung Geöffnet.");
-
             //Generellen CryptoManager laden.
             self.cryptoManager = new defaultEncryptionHandler();
             this.session = "none";
         };
-
-        this.ws.onmessage = function (params) {
+        this.ws.onmessage = function (message) {
             //Nachricht enschlüsseln
-            console.log(params);
-            self.cryptoManager.decrypt(params).then(function (params) {
+            self.cryptoManager.decrypt(message).then(function (params) {
                 var envelope = JSON.parse(params);
                 console.log("Topic:" + envelope.topic);
                 console.log("Data: " + envelope.data);
             }, function (error) {
-                console.log("Apperently i recived a not encrypted Message: " + error);
+                console.log("Recived: " + message);
+                console.log("Apperently i recived a not encrypted Message: ");
             });
         };
     }
@@ -34,7 +32,7 @@ var NetworkManager = (function () {
         };
         this.cryptoManager.encrypt(JSON.stringify(envelope)).then(function (encryptedMessage) {
             self.ws.send(encryptedMessage);
-            console.log(encryptedMessage);
+            console.log("Send:" + envelope + " as :" + encryptedMessage);
         });
     };
     return NetworkManager;

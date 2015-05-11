@@ -31,13 +31,28 @@ module.exports = function (grunt) {
         files: { 'app/css/main.css': 'app/sass/main.scss' }
       }
     },
-    
-    
-    jshint: 
+
+
+    jshint:
     {
       all: ['app/**/*.js']
     },
-
+    
+    typescript: {
+          base: {
+            src: ['app/ts/*.ts'],
+            dest: 'app/js/lib',
+            options: {
+              module: 'amd', //or commonjs 
+              target: 'es5', //or es3 
+              basePath: 'app/ts/',
+              sourceMap: false,
+              noEmitOnError: false,
+              declaration: false
+            }
+          }
+        },
+    
 
     watch:
     {
@@ -47,26 +62,46 @@ module.exports = function (grunt) {
         tasks: ['jshint', 'includeSource'],
         options: {
           spawn: false,
+          livereload: true
+        }
+       },
+       typeScripts:
+        {
+          files: ['**/*.ts'],
+          tasks: ['typescript'],
+          options: {
+            spawn: false,
+          },
         },
-      },
 
-      styles:
-      {
-        files: ['**/*.scss'],
-        tasks: ['sass'],
-        options: {
-          spawn: false,
-          livereload:true
-        },
-      },
+        sassStyles:
+        {
+          files: ['**/*.scss'],
+          tasks: ['sass'],
+          options: {
+            spawn: false,
+            livereload: false
+            }
+         },
+         cssStyles:
+         {
+            files: ['**/*.css'],
+            tasks: ['includeSource'],
+            options: {
+              spawn: false,
+              livereload: true
+            },
 
-    }
+          },
+
+        }
+        
 
 
 
-  });
+      });
 
-  grunt.registerTask('default', ['sass:dist', 'includeSource']);
+  grunt.registerTask('default', ['typescript', 'sass:dist', 'includeSource']);
   grunt.registerTask('hint', ['jshint']);
 
 

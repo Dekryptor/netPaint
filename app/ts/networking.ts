@@ -1,5 +1,6 @@
 /// <reference path="encryption.ts"/>
-/// <reference path="message.ts"/>
+/// <reference path="definitions/message.ts"/>
+/// <reference path="definitions/promise.ts"/>
 // Sould be ws://borsti1.inf.fh-flensburg.de:8080
 class NetworkManager {
 	ws : WebSocket;
@@ -17,14 +18,15 @@ class NetworkManager {
 			this.session="none";
 		}
 	
-		this.ws.onmessage = function (params) {
+		this.ws.onmessage = function (message :MessageEvent) {
 			//Nachricht enschlüsseln
-			self.cryptoManager.decrypt(params).then(function(params) {
+			self.cryptoManager.decrypt(message).then(function(params : string) {
 			  	var envelope : Message = JSON.parse(params);
 				console.log("Topic:" +envelope.topic);
 				console.log("Data: " +envelope.data); 	
 			}, function(error) {
-				console.log("Apperently i recived a not encrypted Message: " + error);
+				console.log("Recived: "+ message)
+				console.log("Apperently i recived a not encrypted Message: ");
 			})
 		}
 		
