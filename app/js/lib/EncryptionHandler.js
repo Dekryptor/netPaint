@@ -9,16 +9,16 @@ var EncryptionHandler = (function () {
     function EncryptionHandler(keydata, initVektor) {
         var self = this;
         if (initVektor == undefined || initVektor.length == 0) {
-            //Einen initierungsvektor erstellen, wenn keiner übergeben.
+            //Einen initierungsvektor erstellen, wenn keiner übergeben wurde.
             this.iv = window.crypto.getRandomValues(new Uint8Array(16));
         }
         else {
             this.iv = initVektor;
         }
-        //Aus dem Raumnamen einen 256bit Hash erstellen.
+        //Aus dem Raum-Namen einen 256bit Hash erstellen.
         this.sha256(keydata).then(function (digest) {
+            //Aus dem Hash und den Vektor einen Cryptokey für AEC-CBC erstellen und Speichern.
             crypto.subtle.importKey("raw", digest, "AES-CBC", true, ["encrypt", "decrypt"]).then(function (keyObj) {
-                //Aus dem Hash einen Cryptokey für AEC-CBC erstellen.
                 self.key = keyObj;
             });
         });
@@ -30,10 +30,9 @@ var EncryptionHandler = (function () {
             return hash;
         });
     };
-    EncryptionHandler.prototype.arrayBufferToString = function (buf) {
-        return new TextDecoder('utf-8').decode(buf);
-    };
     EncryptionHandler.prototype.encryptString = function (data) {
+        //Einen String mit dem AES-Key Verschlüsseln. 
+        //Gibt einen Promise zurück - Welcher einen JSONifed String zurück gibt
         var self = this;
         var buffer = new TextEncoder('utf-8').encode(data);
         return new Promise(function (resolve, reject) {
@@ -46,6 +45,8 @@ var EncryptionHandler = (function () {
         });
     };
     EncryptionHandler.prototype.encryptBuffer = function (data) {
+        //Einen Buffer mit dem AES-Key Verschlüsseln. 
+        //Gibt einen Promise zurück mit einem Buffer als Argument
         var self = this;
         if (this.key == null) {
             throw new Error("Cryptokey ist nicht initialisiert.");
@@ -59,6 +60,8 @@ var EncryptionHandler = (function () {
         });
     };
     EncryptionHandler.prototype.decryptJSON = function (data) {
+        //Einen JSON-String mit dem AES-Key Entschlüsseln. 
+        //Gibt einen Promise zurück - Welcher den UR - String zurück gibt
         var self = this;
         return new Promise(function (resolve, reject) {
             //Aus der JSON wieder einen Buffer erzeugen - Da der Server keine Binäre Übertragung unterstüzt.
@@ -78,32 +81,21 @@ var EncryptionHandler = (function () {
         });
     };
     EncryptionHandler.prototype.decryptBuffer = function (data) {
+        //Einen Buffer entschlüsseln. 
+        //Rückgabewert ist ein Promise mit Buffer als Argument.
         var self = this;
-        if (this.iv == null) {
-            throw new Error("Initialisierungsvektor nicht Gesetzt");
-        }
-        else if (self.key == null) {
-            throw new Error("Key ist nicht initialisiert");
-        }
-        //var buffer : ArrayBufferView = new TextEncoder("utf-8").encode(data);
-        //Neuen Promise erstellen, welcher bei Erfolg den String zurück gibt
         return new Promise(function (resolve, reject) {
             crypto.subtle.decrypt({ name: "AES-CBC", iv: self.iv }, self.key, data).then(function (decryptedBuffer) {
                 resolve(decryptedBuffer);
-            }, function (params) {
-                console.log("Etwas lief falsch");
-                reject(params);
+            }).catch(function (reason) {
+                reject(reason);
             });
         });
     };
-    Object.defineProperty(EncryptionHandler.prototype, "initVektor", {
-        //IV Lesbar machen
-        get: function () {
-            return this.iv;
-        },
-        enumerable: true,
-        configurable: true
-    });
+    EncryptionHandler.prototype.getInitVektor = function () {
+        //Den IV Lesbar machen
+        return this.iv;
+    };
     return EncryptionHandler;
 })();
 var defaultEncryptionHandler = (function (_super) {
