@@ -7,16 +7,16 @@ class EncryptionHandler {
 	constructor(keydata: string, initVektor?: Int8Array) {
 		var self = this;
 		if (initVektor == undefined || initVektor.length == 0) {
-			//Einen initierungsvektor erstellen, wenn keiner übergeben.
+			//Einen initierungsvektor erstellen, wenn keiner übergeben wurde.
 			this.iv = window.crypto.getRandomValues(new Uint8Array(16));
 		}
 		else {
 			this.iv = initVektor;
 		}
-		//Aus dem Raumnamen einen 256bit Hash erstellen.
+		//Aus dem Raum-Namen einen 256bit Hash erstellen.
 		this.sha256(keydata).then(function(digest) {
+			//Aus dem Hash und den Vektor einen Cryptokey für AEC-CBC erstellen und Speichern.
 			crypto.subtle.importKey("raw", digest, "AES-CBC", true, ["encrypt", "decrypt"]).then(function(keyObj) {
-				//Aus dem Hash einen Cryptokey für AEC-CBC erstellen.
 				self.key = keyObj;
 			});
 		});
@@ -31,12 +31,9 @@ class EncryptionHandler {
 		});
 	}
 	
-	
-	arrayBufferToString(buf: ArrayBufferView){
-		return new TextDecoder('utf-8').decode(buf);
-	}
-
 	encryptString(data : string){
+		//Einen String mit dem AES-Key Verschlüsseln. 
+		//Gibt einen Promise zurück - Welcher einen JSONifed String zurück gibt
 		var self = this;
 		var buffer :ArrayBufferView = new TextEncoder('utf-8').encode(data);
 		return new Promise(function(resolve,reject){
@@ -52,6 +49,8 @@ class EncryptionHandler {
 	}
 
 	encryptBuffer(data: ArrayBufferView) {
+		//Einen Buffer mit dem AES-Key Verschlüsseln. 
+		//Gibt einen Promise zurück mit einem Buffer als Argument
 		var self = this;
 		if (this.key == null) {
 			throw new Error("Cryptokey ist nicht initialisiert.");
@@ -71,6 +70,8 @@ class EncryptionHandler {
 	
 	
 	decryptJSON(data :String ){
+		//Einen JSON-String mit dem AES-Key Entschlüsseln. 
+		//Gibt einen Promise zurück - Welcher den UR - String zurück gibt
 		var self = this;
 
 		return new Promise(function(resolve,reject){
@@ -94,30 +95,22 @@ class EncryptionHandler {
 	
 	
 	decryptBuffer(data : ArrayBufferView) {
+		//Einen Buffer entschlüsseln. 
+		//Rückgabewert ist ein Promise mit Buffer als Argument.
 		var self = this;
-		
-		if (this.iv == null) {
-			throw new Error("Initialisierungsvektor nicht Gesetzt");
-		}
-		else if( self.key == null){
-			throw new Error("Key ist nicht initialisiert");
-		}
-		//var buffer : ArrayBufferView = new TextEncoder("utf-8").encode(data);
-		//Neuen Promise erstellen, welcher bei Erfolg den String zurück gibt
 		return new Promise(function(resolve, reject) {
 			crypto.subtle.decrypt({ name: "AES-CBC", iv: self.iv }, self.key, data)
 				.then(function(decryptedBuffer :ArrayBufferView) {
 					resolve(decryptedBuffer);
-				}, 
-				function(params) {
-						console.log("Etwas lief falsch");
-						reject(params);
+				}) 
+				.catch(function(reason) {
+						reject(reason);
 				});
 		});
 	}
 	
-	//IV Lesbar machen
-	public get initVektor(): string {
+	getInitVektor(): string {
+		//Den IV Lesbar machen
 		return this.iv;
 	}
 
