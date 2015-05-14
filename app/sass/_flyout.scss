@@ -1,0 +1,32 @@
+x-flyout{
+	position: absolute;
+	background-color: #EFEFEF;
+    padding: 20px;
+    border-radius: 5px;
+	left: 70px;
+    color: black;
+    box-shadow: black 0px 0px 10px;
+
+	animation: entry 0.5s cubic-bezier(0.01, 0.63, 0.53, 1.68);
+}
+
+x-flyout.hidden{
+	display: none;
+
+}
+
+x-flyout::shadow{	
+}
+
+
+@keyframes entry{
+	from{
+		left: -30px;
+		opacity: 0.1;
+	}
+	to{
+		left: 70px;
+		opacity: 1;
+	}
+	
+}

@@ -2,8 +2,16 @@
 @import 'typo';
 @import 'boxing';
 @import 'menu';
+@import 'flyout';
 @import url(http://weloveiconfonts.com/api/?family=entypo);
- 
+
+/* entypo */
+[class*="entypo-"]:before {
+  font-family: 'entypo', sans-serif;
+} 
+
+
+
 
 body{
     margin: 0px;

@@ -5,6 +5,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-typescript');
   grunt.loadNpmTasks('grunt-serve');
+  grunt.loadNpmTasks('grunt-contrib-concat');
 
   grunt.initConfig({
     //Automatisch alle abhängigkeiten in die Index.html einfügen
@@ -14,11 +15,18 @@ module.exports = function (grunt) {
       },
       myTarget: {
         files: {
-          'app/index.html': 'app/index.tpl.html',
-          'app/elements.html': 'app/elements.tpl.html',
+          'app/index.html': 'app/index.tpl.html'
+         
         }
       }
     },
+    
+    concat: {
+    basic: {
+      src: ['app/components/menu.html', 'app/components/flyout.html'],
+      dest: 'app/components/all-components.html'
+    }},
+    
     
     serve: {
         options: {
@@ -108,7 +116,7 @@ module.exports = function (grunt) {
 
       });
 
-  grunt.registerTask('default', ['typescript', 'sass:dist', 'includeSource']);
+  grunt.registerTask('default', ['typescript', 'concat','sass:dist', 'includeSource']);
   grunt.registerTask('hint', ['jshint']);
 
 

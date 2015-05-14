@@ -2,7 +2,7 @@
 @import url(http://weloveiconfonts.com/api/?family=entypo);
 * {
   font-family: 'Mandali',sans-serif;
-  color: rgba(255, 255, 255, 0.91); }
+  color: black; }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Abel','sans-serif'; }
@@ -79,6 +79,45 @@ x-menu::shadow #content-holder {
 
 x-menu::shadow hr {
   width: 100%; }
+
+x-menu button {
+  font-family: 'entypo', sans-serif;
+  width: 50px;
+  height: 50px;
+  border-radius: 30px;
+  border: 1px solid;
+  background-color: transparent;
+  font-size: 25px;
+  transition: all 0.5s; }
+  x-menu button:focus {
+    outline: none; }
+
+x-flyout {
+  position: absolute;
+  background-color: #EFEFEF;
+  padding: 20px;
+  border-radius: 5px;
+  left: 70px;
+  color: black;
+  box-shadow: black 0px 0px 10px;
+  animation: entry 0.5s cubic-bezier(0.01, 0.63, 0.53, 1.68); }
+
+x-flyout.hidden {
+  display: none;
+  animation: entry 0.5s cubic-bezier(0.01, 0.63, 0.53, 1.68);
+  animation-direction: reverse; }
+
+@keyframes entry {
+  from {
+    left: -30px;
+    opacity: 0.1; }
+  to {
+    left: 70px;
+    opacity: 1; } }
+
+/* entypo */
+[class*="entypo-"]:before {
+  font-family: 'entypo', sans-serif; }
 
 body {
   margin: 0px;
