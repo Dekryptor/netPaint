@@ -4,6 +4,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-sass');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-typescript');
+  grunt.loadNpmTasks('grunt-serve');
 
   grunt.initConfig({
     //Automatisch alle abhängigkeiten in die Index.html einfügen
@@ -19,6 +20,12 @@ module.exports = function (grunt) {
       }
     },
     
+    serve: {
+        options: {
+            port: 9000,
+            'path': "app/"
+        }
+    },
 
     //Sass Dateien Kompilieren
     sass: {
@@ -103,7 +110,6 @@ module.exports = function (grunt) {
 
   grunt.registerTask('default', ['typescript', 'sass:dist', 'includeSource']);
   grunt.registerTask('hint', ['jshint']);
-
 
 
 };
