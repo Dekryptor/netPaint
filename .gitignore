@@ -1,8 +1,5 @@
 #Installed Node modules
 node_modules/
-app/css/**
-*.html
-!*.tmp.html
 
 # Windows image file caches
 Thumbs.db

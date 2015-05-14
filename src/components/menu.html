@@ -1,0 +1,49 @@
+<!-- Menu Component -Sebastian Streich
+
+Erstellt eine Appbar an der Linken Seite die Buttons als Inhalt aufnimmt. 
+Besitzt einen Button zum Verstecken des Menus wenn nicht gebraucht
+-->
+
+<template id="menu-template">
+  	<div id="viewport">
+          <div id='sidebar' class="">
+            <div id='content-holder'>                
+                    <content>
+          
+                    </content>
+                    <hr></hr>  
+            
+              <button id='toggle-view'type="button" class='entypo-eye'></button> 
+            </div>
+          </div>
+  	</div>
+</template>
+
+
+<script>
+(function() {
+  
+  	var menu = Object.create(HTMLElement.prototype);
+  	menu.createdCallback = function() {
+          var tree      = this.createShadowRoot();
+          var template  = document.querySelector('link[rel="import"]').import.querySelector('#menu-template');
+          var clone = document.importNode(template.content, true);
+          tree.appendChild(clone);
+          
+          //
+          var visibilityswitch = tree.querySelector('#toggle-view');
+          visibilityswitch.addEventListener
+          ("click",function(e) {
+             var sidebar = tree.querySelector('#sidebar');
+             if(sidebar.getAttribute("class") != "hidden"){ sidebar.setAttribute ('class','hidden');}
+             else {sidebar.setAttribute ('class','');}
+          });
+          
+    };
+      	
+
+
+    document.registerElement('x-Menu', {prototype: menu});
+}());
+</script>
+

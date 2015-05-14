@@ -15,7 +15,7 @@ module.exports = function (grunt) {
       },
       myTarget: {
         files: {
-          'app/index.html': 'app/index.tpl.html'
+          'app/index.html': 'src/index.tpl.html'
          
         }
       }
@@ -23,8 +23,8 @@ module.exports = function (grunt) {
     
     concat: {
     basic: {
-      src: ['app/components/menu.html', 'app/components/flyout.html'],
-      dest: 'app/components/all-components.html'
+      src: ['src/components/menu.html','src/components/network.html', 'src/components/flyout.html'],
+      dest: 'app/components-compiled.html'
     }},
     
     
@@ -43,7 +43,7 @@ module.exports = function (grunt) {
       },
       dist:
       {
-        files: { 'app/css/main.css': 'app/sass/main.scss' }
+        files: { 'app/css/main.css': 'src/sass/main.scss' }
       }
     },
 
@@ -55,12 +55,12 @@ module.exports = function (grunt) {
     
     typescript: {
           base: {
-            src: ['app/ts/*.ts'],
+            src: ['src/ts/*.ts'],
             dest: 'app/js/lib',
             options: {
               module: 'amd', //or commonjs 
               target: 'es5', //or es3 
-              basePath: 'app/ts/',
+              basePath: 'src/ts/',
               sourceMap: false,
               noEmitOnError: false,
               declaration: false
