@@ -10,7 +10,7 @@ var EncryptionHandler = (function () {
         var self = this;
         if (initVektor == undefined || initVektor.length == 0) {
             //Einen initierungsvektor erstellen, wenn keiner übergeben wurde.
-            this.iv = window.crypto.getRandomValues(new Uint8Array(16));
+            this.iv = crypto.getRandomValues(new Uint8Array(16));
         }
         else {
             this.iv = initVektor;
@@ -26,7 +26,7 @@ var EncryptionHandler = (function () {
     EncryptionHandler.prototype.sha256 = function (str) {
         // String in einen Arraybuffer umwandeln
         var buffer = new TextEncoder("utf-8").encode(str);
-        return window.crypto.subtle.digest("SHA-256", buffer).then(function (hash) {
+        return crypto.subtle.digest("SHA-256", buffer).then(function (hash) {
             return hash;
         });
     };

@@ -1,0 +1,34 @@
+<!-- Room Component - Sebastian Streich 
+
+Die Room Component klinkt sich in das Socket des Parents ein und 
+übernimmt die Verwaltung des GruppenRaumes. 
+
+-->
+
+
+<script>
+    (function() {
+    	
+    	
+    //Den Protoypen Erstellen und Erweitern
+    var Room = Object.create(HTMLElement.prototype);
+    
+    Room.notifyMessage = function(envelope) {
+        //Ein Event schicken, an alle Elemente die sich an den Typ der Message gebunden haben.
+        var event = new CustomEvent(envelope.topic, { 'detail': envelope.data });
+        this.dispatchEvent(event);
+    };
+    
+    
+    	
+    Room.createdCallback = function() 
+    {
+
+     };
+        
+        
+       
+       
+     document.registerElement('x-room', {prototype: Room});
+    }());
+</script>

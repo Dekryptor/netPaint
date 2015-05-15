@@ -22,8 +22,20 @@ x-menu::shadow {
 	left: -20vw;
     
     button{
-        color: $color-accent;
-
+        color: white;
+        &:after{
+            content:"";
+            width: 50px;
+            height: 50px;
+            background-color: black;
+            position: absolute;
+            z-index: 0;
+            top: 0;
+            left: 0;
+            border-radius: 30px;
+    }
+        
+        
     }
 }
 
@@ -36,6 +48,11 @@ button{
     background-color: transparent;
     font-size: 25px;
     transition: all 0.5s;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: black;
     
    &:focus{
        
@@ -44,7 +61,21 @@ button{
     
     &:before{
             content: "\e70a";
-    }    
+            z-index: 1;
+    }  
+    &:after{
+            content:"";
+            width: 0px;
+            height: 0px;
+            background-color: black;
+            position: absolute;
+            z-index: 0;
+            transition: all ease 0.4s;
+            top: 25px;
+            left: 25px;
+            border-radius: 30px;
+    }
+      
 }
 
 

@@ -172,6 +172,53 @@ Abstraktion des SocketManagers in eine HTML Component
 		//Sendet unverschlüsselt
 		this.ws.send(data);
 	};
+    
+    
+    Network.joinRoom = function(name) {
+        var self = this;
+        //Die Verschlüsselung wieder auf Default setzten
+        this.cryptoManager = this.cryptoDefault; 
+        if(name != undefined){
+            return new Promise(function(resolve,reject) {
+                //Nach 10 Sekunden das Verbinden beenden
+                var timeoutID = window.setTimeout(function() {
+                    console.log("Join Timeout");
+                    reject("Timeout");
+                }, 10000);
+                
+                //Aysnchron auf eine Antwort der Clienten Warten
+                var listner = self.addEventListener(name,function(msg) {
+                    window.clearTimeout(timeoutID);
+                    console.log("Confirm Erhalten -> IV :" + msg);
+                    //Aus der JSON wieder ein UINT8 Array erzeugen
+                    var arr =[];
+                    for(var i in msg.detail)
+                    {
+                        arr[i]=msg.detail[i];
+                    }
+                    var iv = new Uint8Array(arr);
+                    //Den Einen neuen EncryptionHandler für den Raum Erstellen
+                    self.cryptoManager = new EncryptionHandler(name,iv);
+                    self.removeEventListener(listner); // Wir mögen keine Speicherlecks
+                    // TODO: ROOM Objekt erstellen
+                    
+                    //
+                    resolve(iv);
+                });
+                
+                self.sendDefaultEncryptedMessage('join',name);
+                
+            });
+        }
+        //Wenn kein Name übergeben wurde einfach wieder in den Default room wechseln
+        else{
+            //Einen Promise der Sofort true gibt zurückgeben
+            return new Promise(function(resolve) {
+                resolve();
+            });
+        }
+    };
+    
     	
     Network.createdCallback = function() 
     {

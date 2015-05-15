@@ -7,25 +7,41 @@
 		
 		<!-- Include all the Libs and CSS Files. Done by Grunt with <3  -->
 		  <link href="css/main.css" rel="stylesheet" type="text/css">
+		  <link rel="import" href="components-compiled.html"/>
+
 		  <script src="js/lib/EncryptionHandler.js"></script>
-		  <script src="js/lib/RoomWorker.js"></script>
 		  <script src="js/lib/SocketManager.js"></script>
 		  <script src="js/lib/definitions/message.js"></script>
 		  <script src="js/lib/definitions/promise.js"></script>
 		  <script src="js/lib/definitions/textencoder.js"></script>
+			  
 	</head>
 	<body>
-			<div class="sidebar">
-           <ul>
-                    <li class=""><span class="entypo-newspaper"></span></li>
-                    <li class=""><span class="entypo-folder"></span></li>
-                    <li class=""><span class="entypo-brush"></span></li>
-                    <li class=""><span class="entypo-back"></span></li>
-                    <li class=""><span class="entypo-floppy"></span></li>
-                </ul>
-            </div>
-            <div class="container"> </div>
+			
+			<x-menu>
+				<button class="button entypo-user">
+					<x-flyout>
+						<h1>UserCounter</h1>
+						<p>This Users are Curently online:</p>
+						<ul>
+							<li>Peter</li>
+							<li>Kim</li>
+							<li>Basti</li>
+						</ul>
+					</x-flyout>
+					
+				</button>
+				
+			</x-menu>
+			
+            <div class="container"> 
+				
+			
+				
+				
+			</div>
 			<!-- App Entrypoint -->
+			<x-network url="ws://borsti1.inf.fh-flensburg.de:8080"></x-network>
 	 	  <script src="js/app.js"></script>
 	</body>
 	
