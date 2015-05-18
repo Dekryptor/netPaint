@@ -20,15 +20,55 @@ Die Room Component klinkt sich in das Socket des Parents ein und
     };
     
     
+    Room.sendKeepAlive = function() {
+        var name = this.getAttribute("username");
+        this.Network.sendMessage("keepAlive",name);
+    };
+    
+    Room.init =function() {
+        var self = this;
+        //Webworker Erstellen 
+        var worker = new Worker("/app/js/lib/RoomWorker.js");
+        worker.addEventListener("message",function(msg) {
+            if(msg.data.data == self.getAttribute('room')){
+                // Enschlüsselte "join"-Message für den Aktuellen Raum bekommen.
+                self.Network.sendDefaultEncryptedMessage(self.getAttribute('room'),self.Network.cryptoManager.getInitVektor()); 
+            }
+        });
+        
+        //An die Broadcastnachrrichten des Parent-Elements binden.
+        this.Network.addEventListener("broadcast",function(msg) {
+            //Wenn eine nicht entschlüsselbare Nachrricht gefunden wird, auf "join"" Nachrrichten untersuchen.
+            worker.postMessage((msg.detail));
+        });
+        
+        this.Network.addEventListener("keepAlive",function(msg) {
+            //Der KeepAlive wird Periodisch gesendet um anderen Mitgliedern im Raum zu signalisieren das man noch da ist.  
+            //TODO: Handeln
+        });
+        
+        window.setInterval(this.sendKeepAlive.bind(this),5000); //Alle 5s ein Keepalive Schicken
+        
+    };
+    
+    
     	
     Room.createdCallback = function() 
     {
-
-     };
+        if(this.Network == undefined && this.parentNode != undefined){
+            this.Network = this.parentNode;
+            this.init();
+        }
+    };
+    Room.attachedCallback = function() {
+        if(this.Network == undefined && this.parentNode != undefined){
+            this.Network = this.parentNode;
+            this.init();
+        }
         
+    };
         
-       
-       
+   
      document.registerElement('x-room', {prototype: Room});
     }());
 </script>

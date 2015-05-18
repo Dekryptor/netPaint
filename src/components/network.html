@@ -110,25 +110,32 @@ Abstraktion des SocketManagers in eine HTML Component
         this.dispatchEvent(event);
     };
     
-    Network.init = function(url) {
+    
+    Network.init = function(url) { 
        var self    = this;
+       //Standard CryptoObjekt Erstellen
+       var defaultvek      = new Uint8Array([38, 86, 215, 184, 230, 210, 185, 187, 139, 141, 157, 192, 67, 41, 251, 58]);
+       this.cryptoDefault  = new EncryptionHandler("none",defaultvek);
+        
+       //Einen neuen WebSocket Öffnen
        this.ws = new WebSocket(url);
-            this.ws.onopen = function(params) {
-    			console.log("Verbindung Geöffnet.");
-    			//Generellen CryptoManager laden.
-    			self.cryptoManager = self.cryptoDefault;
-    		};
-       
+       this.ws.onopen = function(params) {
+    	   console.log("Verbindung Geöffnet.");
+    	   //Generellen CryptoManager laden.
+    	   self.cryptoManager = self.cryptoDefault;
+           self.setAttribute("connected","true");
+    	};
+        
        //Eventlistner für das Empfangen erstellen
        this.ws.addEventListener('message', function(message) {
     			//Nachricht enschlüsseln
     			self.cryptoManager.decryptJSON(message.data)
-    		      .then(function(params) {
-        				var envelope = JSON.parse(params);
+    		      .then(function(decryptedMessage) {
+        				var envelope = JSON.parse(decryptedMessage);
         				self.notifyMessage(envelope);    
         			     })
                   .catch(function(reason) {
-                        //Konnte Nicht Entschlüsselt werden.
+                        //Konnte Nicht Entschlüsselt werden, als broadcast weiterleiten. 
                         self.notifyMessage({"topic":"broadcast","data":message.data});
                        });
             
@@ -173,20 +180,33 @@ Abstraktion des SocketManagers in eine HTML Component
 		this.ws.send(data);
 	};
     
+    Network.createRoom = function(name) {
+        var self = this;
+         //Den Einen neuen EncryptionHandler für den Raum Erstellen
+         self.cryptoManager = new EncryptionHandler(name);
+         //  ROOM Objekt erstellen
+            var room = document.createElement('x-room');
+                room.setAttribute('room',name);
+         self.appendChild(room);
+                
+    
+        
+    };
+    
+    
+    
     
     Network.joinRoom = function(name) {
         var self = this;
         //Die Verschlüsselung wieder auf Default setzten
         this.cryptoManager = this.cryptoDefault; 
+        
+        if(self.firstChild){this.removeChild(this.firstChild);
+        }
+        
         if(name != undefined){
-            return new Promise(function(resolve,reject) {
-                //Nach 10 Sekunden das Verbinden beenden
-                var timeoutID = window.setTimeout(function() {
-                    console.log("Join Timeout");
-                    reject("Timeout");
-                }, 10000);
-                
-                //Aysnchron auf eine Antwort der Clienten Warten
+            new Promise(function(resolve,reject) {
+                 //Aysnchron auf eine Antwort der Clienten Warten
                 var listner = self.addEventListener(name,function(msg) {
                     window.clearTimeout(timeoutID);
                     console.log("Confirm Erhalten -> IV :" + msg);
@@ -197,17 +217,32 @@ Abstraktion des SocketManagers in eine HTML Component
                         arr[i]=msg.detail[i];
                     }
                     var iv = new Uint8Array(arr);
-                    //Den Einen neuen EncryptionHandler für den Raum Erstellen
-                    self.cryptoManager = new EncryptionHandler(name,iv);
                     self.removeEventListener(listner); // Wir mögen keine Speicherlecks
-                    // TODO: ROOM Objekt erstellen
-                    
-                    //
                     resolve(iv);
                 });
                 
+                
+                //Nach 10 Sekunden das Verbinden beenden
+                var timeoutID = window.setTimeout(function() {
+                    self.removeEventListener(listner); //Verhindern das verspätet noch der IV Übernommen wird
+                    console.log("Join Timeout");
+                    reject("Timeout");
+                }, 10000);
+                
+               
+                
                 self.sendDefaultEncryptedMessage('join',name);
                 
+            }).then(function(iv) {
+                    //Erfolgreich einen IV bekommen.
+                    //Den Einen neuen EncryptionHandler für den Raum Erstellen
+                    self.cryptoManager = new EncryptionHandler(name,iv);
+            
+                    //Room Objekt erstellen
+                        var room = document.createElement('x-room');
+                        room.setAttribute('room',name);
+                        self.appendChild(room);
+                 
             });
         }
         //Wenn kein Name übergeben wurde einfach wieder in den Default room wechseln
@@ -224,16 +259,18 @@ Abstraktion des SocketManagers in eine HTML Component
     {
         //Eigenschaften Prüfen, wenn gefunden übernehmen.
         var url     = this.getAttribute('url');
-        var room    = this.getAttribute('room');
-        var self    = this;
-        //Standard CryptoObjekt Erstellen
-        var defaultvek      = new Uint8Array([38, 86, 215, 184, 230, 210, 185, 187, 139, 141, 157, 192, 67, 41, 251, 58]);
-        this.cryptoDefault  = new EncryptionHandler("none",defaultvek);
-        
+        this.setAttribute("connected","false");
         if(url != undefined){
             this.init(url);    
         }
       };
+      
+    Network.attributeChangedCallback = function(attribute, oldValue, newValue) {
+      if(attribute=="url"){
+          this.setAttribute("connected","false");
+          this.init(newValue);
+      }  
+    };
         
         
        

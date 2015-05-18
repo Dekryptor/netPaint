@@ -23,7 +23,7 @@ module.exports = function (grunt) {
     
     concat: {
     basic: {
-      src: ['src/components/menu.html','src/components/network.html', 'src/components/flyout.html'],
+      src: ['src/components/room.html','src/components/menu.html','src/components/network.html', 'src/components/flyout.html'],
       dest: 'app/components-compiled.html'
     }},
     
