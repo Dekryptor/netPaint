@@ -24,15 +24,36 @@ Die Room Component klinkt sich in das Socket des Parents ein und
         var name = this.getAttribute("username");
         this.Network.sendMessage("keepAlive",name);
     };
+    Room.cleanKeepAliveArray = function() {
+        //Clients die innerhalb von 10s kein keepAlive geschickt haben, löschen
+        var persons = this.persons;
+        var now = new Date().getTime();
+        for (var i in persons){
+            if(persons[i] <= now-10000 ){
+                delete persons[i]; //Das Element entfernen
+            }
+        }
+    };
+    
+    Room.getPersonCount = function() {
+         return Object.keys(this.persons).length;  
+    };
     
     Room.init =function() {
         var self = this;
+        self.persons = {};
         //Webworker Erstellen 
         var worker = new Worker("/app/js/lib/RoomWorker.js");
         worker.addEventListener("message",function(msg) {
             if(msg.data.data == self.getAttribute('room')){
-                // Enschlüsselte "join"-Message für den Aktuellen Raum bekommen.
-                self.Network.sendDefaultEncryptedMessage(self.getAttribute('room'),self.Network.cryptoManager.getInitVektor()); 
+                // Enschlüsselte "join"-Anfrage für den Aktuellen Raum bekommen.
+                if(self.getPersonCount() <3){
+                    //Join Anfrage Bestätigen
+                    self.Network.sendDefaultEncryptedMessage(self.getAttribute('room'),self.Network.cryptoManager.getInitVektor()); 
+                }
+                else{
+                    self.Network.sendDefaultEncryptedMessage(self.getAttribute('room'),undefined);
+                }
             }
         });
         
@@ -45,13 +66,14 @@ Die Room Component klinkt sich in das Socket des Parents ein und
         this.Network.addEventListener("keepAlive",function(msg) {
             //Der KeepAlive wird Periodisch gesendet um anderen Mitgliedern im Raum zu signalisieren das man noch da ist.  
             //TODO: Handeln
+            self.persons[msg.detail] = new Date().getTime();
         });
         
         window.setInterval(this.sendKeepAlive.bind(this),5000); //Alle 5s ein Keepalive Schicken
+        window.setInterval(this.cleanKeepAliveArray.bind(this),8000); //Alle 8s das Keepalive array aufräumen
         
     };
-    
-    
+ 
     	
     Room.createdCallback = function() 
     {
@@ -65,7 +87,6 @@ Die Room Component klinkt sich in das Socket des Parents ein und
             this.Network = this.parentNode;
             this.init();
         }
-        
     };
         
    
@@ -333,16 +354,22 @@ Abstraktion des SocketManagers in eine HTML Component
                  //Aysnchron auf eine Antwort der Clienten Warten
                 var listner = self.addEventListener(name,function(msg) {
                     window.clearTimeout(timeoutID);
-                    console.log("Confirm Erhalten -> IV :" + msg);
-                    //Aus der JSON wieder ein UINT8 Array erzeugen
-                    var arr =[];
-                    for(var i in msg.detail)
-                    {
-                        arr[i]=msg.detail[i];
+                    if(msg.detail){
+                        console.log("Confirm Erhalten -> IV :" + msg.detail);
+                        //Aus der JSON wieder ein UINT8 Array erzeugen
+                        var arr =[];
+                        for(var i in msg.detail)
+                        {
+                            arr[i]=msg.detail[i];
+                        }
+                        var iv = new Uint8Array(arr);
+                        self.removeEventListener(listner); // Wir mögen keine Speicherlecks
+                        resolve(iv);
                     }
-                    var iv = new Uint8Array(arr);
-                    self.removeEventListener(listner); // Wir mögen keine Speicherlecks
-                    resolve(iv);
+                    else{
+                        console.log("Antwort ohne IV erhalten");
+                        reject("Full");
+                    }
                 });
                 
                 

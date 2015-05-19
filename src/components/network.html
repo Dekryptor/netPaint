@@ -209,16 +209,22 @@ Abstraktion des SocketManagers in eine HTML Component
                  //Aysnchron auf eine Antwort der Clienten Warten
                 var listner = self.addEventListener(name,function(msg) {
                     window.clearTimeout(timeoutID);
-                    console.log("Confirm Erhalten -> IV :" + msg);
-                    //Aus der JSON wieder ein UINT8 Array erzeugen
-                    var arr =[];
-                    for(var i in msg.detail)
-                    {
-                        arr[i]=msg.detail[i];
+                    if(msg.detail){
+                        console.log("Confirm Erhalten -> IV :" + msg.detail);
+                        //Aus der JSON wieder ein UINT8 Array erzeugen
+                        var arr =[];
+                        for(var i in msg.detail)
+                        {
+                            arr[i]=msg.detail[i];
+                        }
+                        var iv = new Uint8Array(arr);
+                        self.removeEventListener(listner); // Wir mögen keine Speicherlecks
+                        resolve(iv);
                     }
-                    var iv = new Uint8Array(arr);
-                    self.removeEventListener(listner); // Wir mögen keine Speicherlecks
-                    resolve(iv);
+                    else{
+                        console.log("Antwort ohne IV erhalten");
+                        reject("Full");
+                    }
                 });
                 
                 
