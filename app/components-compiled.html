@@ -47,7 +47,7 @@ Die Room Component klinkt sich in das Socket des Parents ein und
         worker.addEventListener("message",function(msg) {
             if(msg.data.data == self.getAttribute('room')){
                 // Enschlüsselte "join"-Anfrage für den Aktuellen Raum bekommen.
-                if(self.getPersonCount() <3){
+                if(self.getPersonCount() < 3){
                     //Join Anfrage Bestätigen
                     self.Network.sendDefaultEncryptedMessage(self.getAttribute('room'),self.Network.cryptoManager.getInitVektor()); 
                 }

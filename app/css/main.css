@@ -113,32 +113,89 @@ x-menu button {
   height: 50px;
   border-radius: 30px;
   border: 1px solid;
+  margin-top: 10px;
+  margin-bottom: 10px;
   background-color: transparent;
   font-size: 25px;
-  transition: all 0.5s; }
+  transition: all 0.5s;
+  position: relative; }
+  x-menu button button[data-tooltip]:after {
+    position: absolute;
+    left: 0;
+    top: -40px;
+    background-color: #ff0000;
+    color: #ffffff;
+    height: 30px;
+    line-height: 30px;
+    border-radius: 5px;
+    padding: 0 15px;
+    content: attr(data-tooltip);
+    white-space: nowrap;
+    display: none; }
   x-menu button:focus {
     outline: none; }
 
 x-flyout {
   position: absolute;
+  overflow: hidden;
   background-color: #EFEFEF;
-  padding: 20px;
-  border-radius: 5px;
-  left: 70px;
   color: black;
   box-shadow: black 0px 0px 10px;
-  animation: entry 0.5s cubic-bezier(0.01, 0.63, 0.53, 1.68); }
+  left: 90px;
+  top: 0px;
+  border-radius: 10px;
+  animation: entry cubic-bezier(0.63, -0.15, 0.19, 0.93) 2s; }
 
 x-flyout.hidden {
   display: none; }
 
+x-flyout h1 {
+  font-size: 1em;
+  text-align: left;
+  border: 1px solid gray;
+  padding-right: 40px;
+  border-left: none;
+  border-top: none;
+  border-right: none;
+  width: 300px;
+  padding-left: 16px;
+  padding-bottom: 10px;
+  margin-top: 10px; }
+
+x-flyout * {
+  padding-left: 16px;
+  font-size: 14px;
+  text-align: left; }
+
 @keyframes entry {
-  from {
-    left: -30px;
-    opacity: 0.01; }
-  to {
-    left: 70px;
-    opacity: 1; } }
+  0% {
+    color: transparent;
+    border-radius: 30px;
+    padding: 0px;
+    top: 16px;
+    left: 35px;
+    max-width: 1px;
+    max-height: 1px;
+    background-color: rgba(255, 255, 255, 0.54); }
+  10% {
+    max-width: 50px;
+    max-height: 50px;
+    top: 0px;
+    left: 0px; }
+  40% {
+    max-width: 50px;
+    max-height: 50px;
+    background-color: white; }
+  49% {
+    color: transparent; }
+  50% {
+    left: 90px;
+    max-width: 30vw;
+    max-height: 50px; }
+  100% {
+    top: 0px;
+    max-height: 100vh;
+    border-radius: 10px; } }
 
 /* entypo */
 [class*="entypo-"]:before {

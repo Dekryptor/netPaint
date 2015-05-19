@@ -121,9 +121,13 @@ x-menu {
     height: 50px;
     border-radius: 30px;
     border: 1px solid;
+    margin-top: 10px;
+    margin-bottom: 10px;
     background-color: transparent;
     font-size: 25px;
     transition: all 0.5s;
+    position: relative;
+
     
    &:focus{
        
