@@ -20,7 +20,10 @@ p > a {
 .container {
   background-color: #141414;
   width: 100%;
-  height: 100vh; }
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center; }
 
 .backcanvas {
   position: absolute;
@@ -119,19 +122,6 @@ x-menu button {
   font-size: 25px;
   transition: all 0.5s;
   position: relative; }
-  x-menu button button[data-tooltip]:after {
-    position: absolute;
-    left: 0;
-    top: -40px;
-    background-color: #ff0000;
-    color: #ffffff;
-    height: 30px;
-    line-height: 30px;
-    border-radius: 5px;
-    padding: 0 15px;
-    content: attr(data-tooltip);
-    white-space: nowrap;
-    display: none; }
   x-menu button:focus {
     outline: none; }
 
