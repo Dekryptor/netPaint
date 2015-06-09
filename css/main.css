@@ -1,5 +1,4 @@
 @import url(http://fonts.googleapis.com/css?family=Abel|Mandali);
-@import url(http://weloveiconfonts.com/api/?family=entypo);
 * {
   font-family: 'Mandali',sans-serif;
   color: black; }
@@ -18,7 +17,7 @@ p > a {
   color: #FF0060; }
 
 .container {
-  background-color: #141414;
+  background-color: #F5F5F5;
   width: 100%;
   height: 100vh;
   display: flex;
@@ -31,6 +30,9 @@ p > a {
   width: 100%;
   height: 100%;
   left: 0; }
+
+x-draw {
+  box-shadow: rgba(43, 42, 42, 0.36) 0px 0px 12px; }
 
 x-menu::shadow #viewport {
   height: 100vh;
@@ -45,49 +47,23 @@ x-menu::shadow #viewport {
 
 x-menu::shadow #sidebar.hidden {
   left: -20vw; }
-  x-menu::shadow #sidebar.hidden button {
-    color: white; }
-    x-menu::shadow #sidebar.hidden button:after {
-      content: "";
-      width: 50px;
-      height: 50px;
-      background-color: black;
-      position: absolute;
-      z-index: 0;
-      top: 0;
-      left: 0;
-      border-radius: 30px; }
-
-x-menu::shadow button {
-  font-family: 'entypo', sans-serif;
-  width: 50px;
-  height: 50px;
-  border-radius: 30px;
-  border: 1px solid;
-  background-color: transparent;
-  font-size: 25px;
-  transition: all 0.5s;
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: black; }
-  x-menu::shadow button:focus {
-    outline: none; }
-  x-menu::shadow button:before {
-    content: "\e70a";
-    z-index: 1; }
-  x-menu::shadow button:after {
+  x-menu::shadow #sidebar.hidden button:after {
     content: "";
-    width: 0px;
-    height: 0px;
+    width: 50px;
+    height: 50px;
     background-color: black;
     position: absolute;
     z-index: 0;
-    transition: all ease 0.4s;
-    top: 25px;
-    left: 25px;
+    top: -1px;
+    left: -1px;
     border-radius: 30px; }
+  x-menu::shadow #sidebar.hidden button i:first-child {
+    color: transparent;
+    display: none; }
+  x-menu::shadow #sidebar.hidden button i:last-child {
+    color: white;
+    display: block;
+    z-index: 1000; }
 
 x-menu::shadow #sidebar {
   width: 70px;
@@ -99,7 +75,43 @@ x-menu::shadow #sidebar {
   justify-content: center;
   min-height: 150px;
   border-radius: 3px;
-  box-shadow: #2B2A2A 0px 0px 12px; }
+  box-shadow: rgba(43, 42, 42, 0.36) 0px 0px 12px; }
+  x-menu::shadow #sidebar button {
+    width: 50px;
+    height: 50px;
+    border-radius: 30px;
+    border: 1px solid;
+    background-color: transparent;
+    font-size: 25px;
+    transition: all 0.5s;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: black; }
+    x-menu::shadow #sidebar button i:first-child {
+      color: black;
+      display: block; }
+    x-menu::shadow #sidebar button i:last-child {
+      color: transparent;
+      display: none; }
+    x-menu::shadow #sidebar button i {
+      transition: all 0.5s;
+      display: block;
+      position: relative; }
+    x-menu::shadow #sidebar button:focus {
+      outline: none; }
+    x-menu::shadow #sidebar button:after {
+      content: "";
+      width: 0px;
+      height: 0px;
+      background-color: black;
+      position: absolute;
+      z-index: 0;
+      transition: all ease 0.4s;
+      top: 25px;
+      left: 25px;
+      border-radius: 30px; }
 
 x-menu::shadow #content-holder {
   display: flex;
@@ -128,13 +140,13 @@ x-menu button {
 x-flyout {
   position: absolute;
   overflow: hidden;
-  background-color: #EFEFEF;
+  background-color: white;
   color: black;
-  box-shadow: black 0px 0px 10px;
+  box-shadow: rgba(43, 42, 42, 0.36) 0px 0px 12px;
   left: 90px;
   top: 0px;
-  border-radius: 10px;
-  animation: entry cubic-bezier(0.63, -0.15, 0.19, 0.93) 2s; }
+  border-radius: 3px;
+  animation: entry cubic-bezier(0.63, -0.15, 0.19, 0.93) 1s; }
 
 x-flyout.hidden {
   display: none; }
@@ -185,7 +197,7 @@ x-flyout * {
   100% {
     top: 0px;
     max-height: 100vh;
-    border-radius: 10px; } }
+    border-radius: 3px; } }
 
 /* entypo */
 [class*="entypo-"]:before {
@@ -194,7 +206,6 @@ x-flyout * {
 body {
   margin: 0px;
   padding: 0px;
-  background-color: #292929;
   height: 100%;
   overflow: hidden;
   display: flex;

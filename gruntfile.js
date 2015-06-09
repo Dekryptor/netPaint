@@ -31,7 +31,7 @@ module.exports = function (grunt) {
       },
       dist:
       {
-        files: { '/css/main.css': '/sass/main.scss' }
+        files: { 'css/main.css': 'sass/main.scss' }
       }
     },
 
@@ -40,7 +40,7 @@ module.exports = function (grunt) {
       scripts:
       {
         files: ['**/*.js'],
-        tasks: ['jshint', 'includeSource'],
+        tasks: [],
         options: {
           spawn: false,
           livereload: true
@@ -54,7 +54,7 @@ module.exports = function (grunt) {
           tasks: ['sass'],
           options: {
             spawn: false,
-            livereload: false
+            livereload: true
             }
          },
          

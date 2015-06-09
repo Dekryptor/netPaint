@@ -1,5 +1,4 @@
-/// <reference path="definitions/CustomHTMLElement.ts"/>
-/// <reference path="definitions/PaintOperation.ts"/>
+
 (function () {
     function PaintOperation() {
         this.time = Date.now();

@@ -5,6 +5,32 @@ Besitzt einen Button zum Verstecken des Menus wenn nicht gebraucht
 -->
 
 <template id="menu-template">
+   <style>
+           .material-icons {
+        font-family: 'Material Icons';
+        font-weight: normal;
+        font-style: normal;
+        font-size: 24px;  /* Preferred icon size */
+        display: inline-block;
+        width: 1em;
+        height: 1em;
+        line-height: 1;
+        text-transform: none;
+        letter-spacing: normal;
+      
+        /* Support for all WebKit browsers. */
+        -webkit-font-smoothing: antialiased;
+        /* Support for Safari and Chrome. */
+        text-rendering: optimizeLegibility;
+      
+        /* Support for Firefox. */
+        -moz-osx-font-smoothing: grayscale;
+      
+        /* Support for IE. */
+        font-feature-settings: 'liga';
+      }
+     
+   </style>
   	<div id="viewport">
           <div id='sidebar' class="">
             <div id='content-holder'>                
@@ -13,7 +39,10 @@ Besitzt einen Button zum Verstecken des Menus wenn nicht gebraucht
                     </content>
                     <hr></hr>  
             
-              <button id='toggle-view'type="button" class='entypo-eye'></button> 
+              <button id='toggle-view'type="button">
+                <i class="material-icons">visibility</i>
+                <i class="material-icons">visibility_off</i>
+              </button> 
             </div>
           </div>
   	</div>
