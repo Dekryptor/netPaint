@@ -3,7 +3,6 @@
 @import 'boxing';
 @import 'menu';
 @import 'flyout';
-@import url(http://weloveiconfonts.com/api/?family=entypo);
 
 /* entypo */
 [class*="entypo-"]:before {
@@ -13,10 +12,10 @@
 
 
 
+
 body{
     margin: 0px;
     padding: 0px;
-	background-color: $color-l2;
     height: 100%;
     overflow: hidden;
     display: flex;
