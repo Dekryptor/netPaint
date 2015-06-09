@@ -8,30 +8,18 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-concat');
 
   grunt.initConfig({
-    //Automatisch alle abhängigkeiten in die Index.html einfügen
-    includeSource: {
-      options: {
-        basePath: 'app',
-      },
-      myTarget: {
-        files: {
-          'app/index.html': 'src/index.tpl.html'
-         
-        }
-      }
-    },
     
     concat: {
     basic: {
-      src: ['src/components/draw.html','src/components/room.html','src/components/menu.html','src/components/network.html', 'src/components/flyout.html'],
-      dest: 'app/components-compiled.html'
+      src: ['components/DrawComponent/draw.html','components/NetworkHandler/room.html','components/MenuBar/menu.html','components/NetworkHandler/network.html', 'components/Flyout/flyout.html'],
+      dest: 'components/compiled.html'
     }},
     
     
     serve: {
         options: {
             port: 9000,
-            'path': "app/"
+            'path': "/"
         }
     },
 
@@ -43,31 +31,9 @@ module.exports = function (grunt) {
       },
       dist:
       {
-        files: { 'app/css/main.css': 'src/sass/main.scss' }
+        files: { '/css/main.css': '/sass/main.scss' }
       }
     },
-
-
-    jshint:
-    {
-      all: ['app/**/*.js']
-    },
-    
-    typescript: {
-          base: {
-            src: ['src/ts/*.ts'],
-            dest: 'app/js/lib',
-            options: {
-              module: 'amd', //or commonjs 
-              target: 'es5', //or es3 
-              basePath: 'src/ts/',
-              sourceMap: false,
-              noEmitOnError: true,
-              declaration: false
-            }
-          }
-        },
-    
 
     watch:
     {
@@ -80,14 +46,7 @@ module.exports = function (grunt) {
           livereload: true
         }
        },
-       typeScripts:
-        {
-          files: ['**/*.ts'],
-          tasks: ['typescript'],
-          options: {
-            spawn: false,
-          },
-        },
+       
 
         sassStyles:
         {
@@ -98,17 +57,7 @@ module.exports = function (grunt) {
             livereload: false
             }
          },
-         cssStyles:
-         {
-            files: ['**/*.css'],
-            tasks: ['includeSource'],
-            options: {
-              spawn: false,
-              livereload: true
-            },
-
-          },
-
+         
         }
         
 
@@ -116,7 +65,7 @@ module.exports = function (grunt) {
 
       });
 
-  grunt.registerTask('default', ['typescript', 'concat','sass:dist', 'includeSource']);
+  grunt.registerTask('default', ['concat','sass:dist']);
   grunt.registerTask('hint', ['jshint']);
 
 

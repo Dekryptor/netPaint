@@ -7,7 +7,7 @@
 </template>
 
 
-<script src="js/lib/DrawComponent.js"></script>
+<script src="DrawComponent/DrawComponent.js"></script>
 <!-- Room Component - Sebastian Streich 
 
 Die Room Component klinkt sich in das Socket des Parents ein und 
@@ -124,33 +124,7 @@ Besitzt einen Button zum Verstecken des Menus wenn nicht gebraucht
   	</div>
 </template>
 
-
-<script>
-(function() {
-  
-  	var menu = Object.create(HTMLElement.prototype);
-  	menu.createdCallback = function() {
-          var tree      = this.createShadowRoot();
-          var template  = document.querySelector('link[rel="import"]').import.querySelector('#menu-template');
-          var clone = document.importNode(template.content, true);
-          tree.appendChild(clone);
-          
-          //
-          var visibilityswitch = tree.querySelector('#toggle-view');
-          visibilityswitch.addEventListener
-          ("click",function(e) {
-             var sidebar = tree.querySelector('#sidebar');
-             if(sidebar.getAttribute("class") != "hidden"){ sidebar.setAttribute ('class','hidden');}
-             else {sidebar.setAttribute ('class','');}
-          });
-          
-    };
-      	
-
-
-    document.registerElement('x-Menu', {prototype: menu});
-}());
-</script>
+<script src="Menubar/menubar.js"></script>
 
 
 <!-- Network Component - Sebastian Streich 
@@ -453,57 +427,4 @@ verschwindet wieder sobald ein anderes Element berührt wird.
     <content></content>
   </div>
 </template>
-<script>
-  (function() {
-    	var flyout = Object.create(HTMLElement.prototype);
-
-
-    	flyout.createdCallback = function() {
-            this.tree       = this.createShadowRoot();
-            var template    = document.querySelector('link[rel="import"]').import.querySelector('#flyout-template');
-            var clone       = document.importNode(template.content, true);
-            
-            this.tree.appendChild(clone);
-      };
-      
-      flyout.toggleVisibility = function() {
-         if(this.getAttribute("class") != "hidden")
-         {
-           this.setAttribute('class','hidden');
-         }
-         else
-         {
-           this.setAttribute('class','');
-         }
-      };
-      
-      flyout.attachedCallback = function (params) {
-            var self = this;
-            try{
-              //Versuchen sich an die EventHandler zu binden.
-              var target = self.parentElement;
-              target.addEventListener('click', 
-                function(params) {
-                  //An das Elternelement Binden um die Sichtbarkeit zu toggeln
-                   if(target == event.target){
-                    self.toggleVisibility(); 
-                }});
-                // Wenn im Fenster nicht auf das Eltern Element und nicht auf das Flyout geklickt wird, ausblenden
-              window.addEventListener("click",function() {
-                  if(self != event.target && self.parentElement != event.target){
-                    self.setAttribute('class','hidden');
-                  }
-              });
-            }
-            catch(e){
-               throw new Error("Couldnt Attach to parent");
-            }
-      };
-       
-    
-        	
-  
-  
-  	document.registerElement('x-Flyout', {prototype: flyout});
-  }());
-</script>
+<script src="Flyout/flyout.js"></script>

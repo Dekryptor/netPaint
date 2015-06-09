@@ -1,26 +1,4 @@
-<!-- Menu Component -Sebastian Streich
 
-Erstellt eine Appbar an der Linken Seite die Buttons als Inhalt aufnimmt. 
-Besitzt einen Button zum Verstecken des Menus wenn nicht gebraucht
--->
-
-<template id="menu-template">
-  	<div id="viewport">
-          <div id='sidebar' class="">
-            <div id='content-holder'>                
-                    <content>
-          
-                    </content>
-                    <hr></hr>  
-            
-              <button id='toggle-view'type="button" class='entypo-eye'></button> 
-            </div>
-          </div>
-  	</div>
-</template>
-
-
-<script>
 (function() {
   
   	var menu = Object.create(HTMLElement.prototype);
@@ -45,5 +23,3 @@ Besitzt einen Button zum Verstecken des Menus wenn nicht gebraucht
 
     document.registerElement('x-Menu', {prototype: menu});
 }());
-</script>
-

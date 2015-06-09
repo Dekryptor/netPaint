@@ -1,19 +1,4 @@
-<!--  Flyout Component -Sebastian Streich
-
-Bindet sich auf das Klick-Event des Parents und zeigt dann sein inneres HTML,
-verschwindet wieder sobald ein anderes Element berührt wird.
--->
-
-
-
-
-<template id="flyout-template">
-  <div id='scaffholder'>
-    <content></content>
-  </div>
-</template>
-<script>
-  (function() {
+ (function() {
     	var flyout = Object.create(HTMLElement.prototype);
 
 
@@ -65,4 +50,3 @@ verschwindet wieder sobald ein anderes Element berührt wird.
   
   	document.registerElement('x-Flyout', {prototype: flyout});
   }());
-</script>
