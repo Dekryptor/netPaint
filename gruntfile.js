@@ -62,7 +62,7 @@ module.exports = function (grunt) {
               target: 'es5', //or es3 
               basePath: 'src/ts/',
               sourceMap: false,
-              noEmitOnError: false,
+              noEmitOnError: true,
               declaration: false
             }
           }

@@ -7,7 +7,7 @@ self.addEventListener('message',function(msg) {
 	//Verschlüsselte Nachrricht auf Zweitem Thread Enschlüsseln
 		var me = self;
 		enc.decryptJSON(msg.data)
-    		      .then(function(params) {
+    		      .then(function(params : string) {
 						var envelope = JSON.parse(params);
         				if(envelope.topic == "join"){
 							//Wenn es eine Message mit Topic Join ist, die Nachrricht wieder an den Hauptthread übergeben
