@@ -63,6 +63,7 @@
             this.paintstack.push(this.drawCandidate);
             this.drawCandidate = null;
             down = false;
+            this.dispatchEvent(new Event("newLine"));
         }
         that.addEventListener("touchend", endDraw.bind(this));
         that.addEventListener("mouseup", endDraw.bind(this));
