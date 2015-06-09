@@ -25,6 +25,7 @@
             var self = this;
             try{
               //Versuchen sich an die EventHandler zu binden.
+      
               var target = self.parentElement;
               target.addEventListener('click', 
                 function(params) {

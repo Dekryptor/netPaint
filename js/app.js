@@ -1,4 +1,7 @@
-//Test JS 
-
-document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>');
-
+window.addEventListener("load",function(){
+	
+	document.querySelector("#delete").addEventListener("click",function() {
+		document.querySelector("x-draw").delete();
+	});
+	
+});

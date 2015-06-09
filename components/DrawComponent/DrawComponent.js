@@ -5,8 +5,9 @@
         this.xPoints = new Array;
         this.yPoints = new Array;
         this.id = Math.round(Math.random() * 2147483648); //31 Bit 
-    }
-    ;
+    };
+    
+    
     var xdraw = Object.create(HTMLElement.prototype);
     //LifecycleCallbacks Registrieren
     xdraw.attachedCallback = function () {
@@ -84,12 +85,14 @@
         var canvas = this.shadowDOM.querySelector("canvas");
         var ctx = canvas.getContext("2d");
         var candidate = this.drawCandidate;
-        var paintstack = this.paintstack;
         this.render = function () {
+      
+            var paintstack = this.paintstack;
             if (renderState != paintstack.length) {
                 if (renderState > paintstack.length) {
                     ctx.save();
-                    ctx.clearRect(0, 0, this.width, this.height);
+                    
+                    ctx.clearRect(0, 0, this.clientWidth, this.clientHeight);
                     for (var i = 0; i < this.paintstack.length; i++) {
                         //Painstack Malen
                         ctx.beginPath();
@@ -127,5 +130,26 @@
             requestAnimationFrame(this.render.bind(this)); //Nächsten Frame anfordern
         };
     };
+    
+    
+    //Öffentlichen Funktionen Definieren
+    
+    xdraw.delete = function() {
+        this.paintstack = new Array;
+    };
+    xdraw.undo = function() {
+        this.paintstack.pop();
+    };
+    
+    xdraw.add = function(line){
+        //Fügt eine Linie des Types PaintOperation hinzu
+        if ( (line.xPoints.length - line.yPoints.length) == 0 )  {
+            //Besitzt Punkte und davon gleichviele
+            this.paintstack.push(line);
+        }
+    };
+    
+    
+    
     document.registerElement('x-Draw', { prototype: xdraw });
 }());

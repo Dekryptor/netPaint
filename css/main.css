@@ -123,7 +123,6 @@ x-menu::shadow hr {
   width: 100%; }
 
 x-menu button {
-  font-family: 'entypo', sans-serif;
   width: 50px;
   height: 50px;
   border-radius: 30px;
@@ -131,9 +130,12 @@ x-menu button {
   margin-top: 10px;
   margin-bottom: 10px;
   background-color: transparent;
-  font-size: 25px;
+  font-size: 30px;
   transition: all 0.5s;
-  position: relative; }
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center; }
   x-menu button:focus {
     outline: none; }
 
