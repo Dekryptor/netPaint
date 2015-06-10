@@ -34,7 +34,7 @@
         var self = this;
         self.persons = {};
         //Webworker Erstellen 
-        var worker = new Worker("/app/js/lib/RoomWorker.js");
+        var worker = new Worker("components/NetworkHandler/RoomWorker.js");
         worker.addEventListener("message",function(msg) {
             if(msg.data.data == self.getAttribute('room')){
                 // Enschlüsselte "join"-Anfrage für den Aktuellen Raum bekommen.

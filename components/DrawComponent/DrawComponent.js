@@ -48,13 +48,12 @@
                     this.drawCandidate.yPoints[index] = event.pageY - this.offsetTop;
                 }
                 index++;
+                this.dispatchEvent(new Event("newLine"));
             }
             else {
                 index = 0;
             }
-            if (index >= 255) {
-                console.log("overflow vom index");
-            }
+           
         }
         that.addEventListener("touchmove", doDraw.bind(this));
         that.addEventListener("mousemove", doDraw.bind(this));
@@ -64,7 +63,6 @@
             this.paintstack.push(this.drawCandidate);
             this.drawCandidate = null;
             down = false;
-            this.dispatchEvent(new Event("newLine"));
            }
         }
         that.addEventListener("touchend", endDraw.bind(this));
@@ -83,7 +81,7 @@
         var clone = document.importNode(template.content, true);
         this.shadowDOM.appendChild(clone);
         this.paintstack = new Array; //Paintstack Hashtable erstellen.
-        var renderState = 0;
+        this.renderState = 0;
         var imageBuffer;
         this.drawCandidate = new PaintOperation();
         var canvas = this.shadowDOM.querySelector("canvas");
@@ -92,10 +90,10 @@
         this.render = function () {
            
             var paintstack = this.paintstack;
-            if (renderState != paintstack.length) {
+            if (this.renderState != paintstack.length || true) {
                 //Rendern 
                 
-                if (renderState > paintstack.length) {
+                if (this.renderState > paintstack.length || true) {
                     ctx.save();
                     
                     ctx.clearRect(0, 0, this.clientWidth, this.clientHeight);
@@ -110,8 +108,8 @@
                         ctx.closePath();
                     }
                 }
-                else if (renderState < paintstack.length) {
-                    for (var i = renderState; i < this.paintstack.length; i++) {
+                else if (this.renderState < paintstack.length) {
+                    for (var i = this.renderState; i < this.paintstack.length; i++) {
                         //Painstack Malen
                         ctx.beginPath();
                         ctx.moveTo(paintstack[i].xPoints[0], paintstack[i].yPoints[0]);
@@ -123,7 +121,7 @@
                     }
                 }
             }
-            renderState = paintstack.length;
+            this.renderState = paintstack.length;
             if (this.drawCandidate) {
                 ctx.beginPath();
                 ctx.moveTo(this.drawCandidate.xPoints[0], this.drawCandidate.yPoints[0]);
@@ -149,11 +147,31 @@
     };
     
     xdraw.add = function(line){
+    
         //Fügt eine Linie des Types PaintOperation hinzu
-        if ( (line.xPoints.length - line.yPoints.length) == 0 )  {
-            //Besitzt Punkte und davon gleichviele
-            this.paintstack.push(line);
-        }
+            var found = false;
+            var index;
+            //Nach der ID der Übergebenen Linie suchen
+            for(var i =0 ; i< this.paintstack.length; i++){
+                if(this.paintstack[i].id == line.id){
+                    found = true;
+                    index =i;
+                }
+            }
+            
+            if(found){
+                // Gefunden, neue Punkte zur linie Hinzufügen
+                this.paintstack[index].xPoints.push(line.xPoints);
+                this.paintstack[index].yPoints.push(line.yPoints);
+                this.renderstate = 0;
+            }
+            else{
+                // Nicht gefunden, neue Linie hinzufügen
+                this.paintstack.push(line);
+            }
+            
+            
+        
     };
     
     
