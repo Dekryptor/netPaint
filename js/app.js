@@ -1,10 +1,16 @@
 window.addEventListener("load",function(){
 	
+	var draw =document.querySelector("x-draw");
+	
 	document.querySelector("#delete").addEventListener("click",function() {
-		document.querySelector("x-draw").delete();
+		draw.delete();
 	});
 	
-	var draw =document.querySelector("x-draw");
+	
+	document.querySelector("#undo").addEventListener("click",function() {
+		draw.undo();
+	});
+	
 	draw.addEventListener("newLine",function() {
 		 stroke = draw.paintstack[draw.paintstack.length-1];
 		console.log(stroke);

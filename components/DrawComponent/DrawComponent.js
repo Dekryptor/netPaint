@@ -59,13 +59,16 @@
         that.addEventListener("touchmove", doDraw.bind(this));
         that.addEventListener("mousemove", doDraw.bind(this));
         function endDraw(event) {
-            // Wenn Fertig, den Candiate oben auf den DrawStack Platzieren
+           if(down){
+                // Wenn Fertig, den Candiate oben auf den DrawStack Platzieren
             this.paintstack.push(this.drawCandidate);
             this.drawCandidate = null;
             down = false;
             this.dispatchEvent(new Event("newLine"));
+           }
         }
         that.addEventListener("touchend", endDraw.bind(this));
+         that.addEventListener("mouseleave", endDraw.bind(this));
         that.addEventListener("mouseup", endDraw.bind(this));
     };
     xdraw.attributeChangedCallback = function (attribute, oldVal, newVal) {
@@ -87,9 +90,11 @@
         var ctx = canvas.getContext("2d");
         var candidate = this.drawCandidate;
         this.render = function () {
-      
+           
             var paintstack = this.paintstack;
             if (renderState != paintstack.length) {
+                //Rendern 
+                
                 if (renderState > paintstack.length) {
                     ctx.save();
                     
@@ -128,6 +133,7 @@
                 ctx.stroke();
                 ctx.closePath();
             }
+          
             requestAnimationFrame(this.render.bind(this)); //Nächsten Frame anfordern
         };
     };

@@ -136,6 +136,30 @@
         
     };
     
+    
+       Network.createdCallback = function() 
+    {
+        //Eigenschaften Prüfen, wenn gefunden übernehmen.
+        var url     = this.getAttribute('url');
+        this.setAttribute("connected","false");
+        if(url != undefined){
+            this.init(url);    
+        }
+      };
+      
+    Network.attributeChangedCallback = function(attribute, oldValue, newValue) {
+      if(attribute=="url"){
+          this.setAttribute("connected","false");
+          this.init(newValue);
+      }  
+    };
+        
+      
+    
+    
+    
+    
+    
     Network.sendMessage = function(topic,data) {
         //Nachrricht mit dem Aktuellen AES Key Verschlüsseln
         var self = this;
@@ -254,24 +278,7 @@
     };
     
     	
-    Network.createdCallback = function() 
-    {
-        //Eigenschaften Prüfen, wenn gefunden übernehmen.
-        var url     = this.getAttribute('url');
-        this.setAttribute("connected","false");
-        if(url != undefined){
-            this.init(url);    
-        }
-      };
-      
-    Network.attributeChangedCallback = function(attribute, oldValue, newValue) {
-      if(attribute=="url"){
-          this.setAttribute("connected","false");
-          this.init(newValue);
-      }  
-    };
-        
-        
+   
        
        
      document.registerElement('x-network', {prototype: Network});
