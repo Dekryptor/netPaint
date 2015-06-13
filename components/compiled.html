@@ -111,7 +111,6 @@ verschwindet wieder sobald ein anderes Element berührt wird.
         #Sample canvas {
             width: 100px;
             height: 100px;
-            background-color: red;
             margin: 15px;
         }
         #Sample div{
@@ -137,7 +136,6 @@ verschwindet wieder sobald ein anderes Element berührt wird.
             width: 50px;
             height: 50px;
             margin: 10px;
-            background-color: blue;
         }
         
         #controls{
@@ -150,16 +148,16 @@ verschwindet wieder sobald ein anderes Element berührt wird.
         <div id="newPen">
             <div id="inputHolder">
                 <small>Größe</small>
-                <input type="range" />
+                <input min="1" max="40" type="range" />
                 <small>Rot</small>
-                <input type="range" />
+                <input type="range"  min="0" max="255" value="0"/>
                 <small>Grün</small>
-                <input type="range" />
+                <input type="range"  min="0" max="255" value="0"/>
                 <small>Blau</small>
-                <input type="range" />
+                <input type="range" min="0" max="255"  value="0"/>
             </div>
             <div id="Sample">
-                <canvas></canvas>
+                <canvas width="100" height="100"></canvas>
                 <div>
                     <small>Farbe</small>
                     <input type="text" />
@@ -170,14 +168,14 @@ verschwindet wieder sobald ein anderes Element berührt wird.
                 </div>
             </div>
             <div id="recent">
-                <canvas></canvas>
-                <canvas></canvas>
-                <canvas></canvas>
-                <canvas></canvas>
+                <canvas width="100" height="100" data="0"></canvas>
+                <canvas width="100" height="100" data="1"></canvas>
+                <canvas width="100" height="100" data="2"></canvas>
+                <canvas width="100" height="100" data="3"></canvas>
             </div>
         </div>
         <div id="controls">
-            <input type="button" value="Abbruch" />
+
             <input type="button" value="Sichern" />
         </div>
     </div>
