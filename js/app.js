@@ -3,17 +3,30 @@ window.addEventListener("load",function(){
 	var draw =document.querySelector("x-draw");
 	var network =document.querySelector("x-network");
 	var penEditor = document.querySelector('x-PenEditor');
+	var lastIdSend;
 	document.querySelector("#delete").addEventListener("click",function() {
 		draw.delete();
 	});
 	
 	
 	document.querySelector("#undo").addEventListener("click",function() {
-		draw.undo();
+		if(lastIdSend){
+			draw.undo(lastIdSend);
+			network.sendMessage("undo",lastIdSend);
+			lastIdSend = undefined;
+		}
 	});
+	
+	network.addEventListener("undo",function(msg) {
+		draw.undo(msg.detail);
+		console.log("undo:" + msg.detail);
+	}.bind(this));
+	
+	
 	
 	draw.addEventListener("newLine",function() {
 		 var stroke = draw.drawCandidate;
+		 lastIdSend = stroke.id;
 		 var paket;	 
 		 paket = {
 				 "id" 		: stroke.id,
@@ -34,7 +47,6 @@ window.addEventListener("load",function(){
 	network.addEventListener("paint",function(msg) {
 		 var stroke = JSON.parse(msg.detail);
 		 draw.add(stroke);
-		 console.log(stroke);
 	}.bind(this));
 	
 	penEditor.addEventListener("newPen",function() {

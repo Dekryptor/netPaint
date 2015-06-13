@@ -26,10 +26,10 @@
     var xdraw = Object.create(HTMLElement.prototype);
     //LifecycleCallbacks Registrieren
     xdraw.attachedCallback = function () {
-        var that = this;
-        var can = that.shadowDOM.querySelector("canvas");
-        can.setAttribute("width", that.getAttribute("width"));
-        can.setAttribute("height", that.getAttribute("height"));
+        var self = this;
+        var can = self.shadowDOM.querySelector("canvas");
+        can.setAttribute("width", self.getAttribute("width"));
+        can.setAttribute("height", self.getAttribute("height"));
         //Rendering Starten
         requestAnimationFrame(this.render.bind(this));
         //Wichtigen Eventlistner Hinzufügen
@@ -38,10 +38,10 @@
         function startDraw(event) {
             //Beim Mousedown Zeichnen Initiatisieren
             
-            this.drawCandidate          = new PaintOperation();
-            this.drawCandidate.color    = this.protoPen.getColor();
-            this.drawCandidate.size     = this.protoPen.size;
-            this.drawCandidate.special  = this.protoPen.special;
+            this.drawCandidate = new PaintOperation();
+            this.drawCandidate.color = this.protoPen.getColor();
+            this.drawCandidate.size = this.protoPen.size;
+            this.drawCandidate.special = this.protoPen.special;
             down = true;
             if (event.type == "touchstart") {
                 this.drawCandidate.xPoints[0] = event.changedTouches[0].pageX - this.offsetLeft;
@@ -52,8 +52,8 @@
                 this.drawCandidate.yPoints[0] = event.pageY - this.offsetTop;
             }
         }
-        that.addEventListener("mousedown", startDraw.bind(this));
-        that.addEventListener("touchstart", startDraw.bind(this));
+        self.addEventListener("mousedown", startDraw.bind(this));
+        self.addEventListener("touchstart", startDraw.bind(this));
         function doDraw(event) {
             // Bewegung im DrawCandidate Speichern
             if (down) {
@@ -73,8 +73,8 @@
             }
 
         }
-        that.addEventListener("touchmove", doDraw.bind(this));
-        that.addEventListener("mousemove", doDraw.bind(this));
+        self.addEventListener("touchmove", doDraw.bind(this));
+        self.addEventListener("mousemove", doDraw.bind(this));
         function endDraw(event) {
             if (down) {
                 // Wenn Fertig, den Candiate oben auf den DrawStack Platzieren
@@ -83,9 +83,9 @@
                 down = false;
             }
         }
-        that.addEventListener("touchend", endDraw.bind(this));
-        that.addEventListener("mouseleave", endDraw.bind(this));
-        that.addEventListener("mouseup", endDraw.bind(this));
+        self.addEventListener("touchend", endDraw.bind(this));
+        self.addEventListener("mouseleave", endDraw.bind(this));
+        self.addEventListener("mouseup", endDraw.bind(this));
     };
     xdraw.attributeChangedCallback = function (attribute, oldVal, newVal) {
         var that = this;
@@ -116,24 +116,24 @@
                 ctx.beginPath();
                 ctx.moveTo(paintstack[i].xPoints[0], paintstack[i].yPoints[0]);
                 for (var x = 1; x < paintstack[i].xPoints.length; x++) {
-                       ctx.lineTo(paintstack[i].xPoints[x], paintstack[i].yPoints[x]);
+                    ctx.lineTo(paintstack[i].xPoints[x], paintstack[i].yPoints[x]);
                 }
                 ctx.stroke();
                 ctx.closePath();
-                }
+            }
             //DrawCandidate darüber zeichnen
             this.renderState = paintstack.length;
-                if (this.drawCandidate) {
-                    ctx.strokeStyle = this.drawCandidate.color;
-                    ctx.lineWidth = this.drawCandidate.size;
-                    ctx.beginPath();
-                    ctx.moveTo(this.drawCandidate.xPoints[0], this.drawCandidate.yPoints[0]);
-                    for (var x = 1; x < this.drawCandidate.xPoints.length; x++) {
-                        ctx.lineTo(this.drawCandidate.xPoints[x], this.drawCandidate.yPoints[x]);
-                    }
-                    ctx.stroke();
-                    ctx.closePath();
-            }  
+            if (this.drawCandidate) {
+                ctx.strokeStyle = this.drawCandidate.color;
+                ctx.lineWidth = this.drawCandidate.size;
+                ctx.beginPath();
+                ctx.moveTo(this.drawCandidate.xPoints[0], this.drawCandidate.yPoints[0]);
+                for (var x = 1; x < this.drawCandidate.xPoints.length; x++) {
+                    ctx.lineTo(this.drawCandidate.xPoints[x], this.drawCandidate.yPoints[x]);
+                }
+                ctx.stroke();
+                ctx.closePath();
+            }
 
             requestAnimationFrame(this.render.bind(this)); //Nächsten Frame anfordern
         };
@@ -145,12 +145,19 @@
     xdraw.delete = function () {
         this.paintstack = new Array;
     };
-    xdraw.undo = function () {
-        this.paintstack.pop();
+    xdraw.undo = function (id) {
+        if (id) {
+            for (var i = 0; i < this.paintstack.length; i++) {
+                if (this.paintstack[i].id == id) {
+                    this.paintstack.splice(i, 1);
+                }
+            }
+
+        }
     };
 
-    
-    xdraw.setPen = function(p) {
+
+    xdraw.setPen = function (p) {
         this.protoPen = Object.create(p);
     };
 
