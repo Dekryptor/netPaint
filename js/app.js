@@ -2,7 +2,7 @@ window.addEventListener("load",function(){
 	
 	var draw =document.querySelector("x-draw");
 	var network =document.querySelector("x-network");
-	
+	var penEditor = document.querySelector('x-PenEditor');
 	document.querySelector("#delete").addEventListener("click",function() {
 		draw.delete();
 	});
@@ -26,7 +26,6 @@ window.addEventListener("load",function(){
 		} 
 		 
 		 var strStroke = JSON.stringify(paket);
-		 console.log(paket);
 		 network.sendMessage("paint",strStroke);
 	}.bind(this));
 	
@@ -37,6 +36,10 @@ window.addEventListener("load",function(){
 		 draw.add(stroke);
 		 console.log(stroke);
 	}.bind(this));
+	
+	penEditor.addEventListener("newPen",function() {
+		draw.setPen(penEditor.penProto);
+	});
 	
 	
 });
