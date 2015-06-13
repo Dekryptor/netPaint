@@ -2,61 +2,70 @@
 <html>
 	<head>
 		<title>Netpaint 0.1</title>
-		<meta charset="utf-8"/>
-		<meta name="viewport" content="width=device-width, initial-scale=1"/>
-		
-		<!-- Include all the Libs and CSS Files. Done by Grunt with <3  -->
-		  <link href="css/main.css" rel="stylesheet" type="text/css">
-		  <link rel="import" href="components/compiled.html"/>
-		  <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
-      rel="stylesheet">
-
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<!-- Include all the Libs and CSS Files. Done by Grunt with <3 -->
+		<link href="css/main.css" rel="stylesheet" type="text/css">
+		<link rel="import" href="components/compiled.html" />
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	</head>
 	<body>
-			
-			<x-menu>
-				<button class="button entypo-plus">
-					 <i class="material-icons">add</i>
-				</button>
-
-				<button class="button entypo-folder">
-					 <i class="material-icons">input</i>
-				</button>
-
-				<button class="button" id="delete">
-					 <i class="material-icons">delete</i>
-				</button>
-				<button class="button" id="undo">
-					 <i class="material-icons">undo</i>
-				</button>
-
-				<button class="button">
-					 <i class="material-icons">brush</i>
-					 <x-flyout>
-					 	<h1>Stift anpassen</h1>
-						 <x-PenEditor></x-PenEditor>
-					 </x-flyout>
-				</button>
-				<button class="button">
-					 <i class="material-icons">menu</i>
-					<x-flyout hidden="true">
+		<x-menu>
+			<button class="button entypo-plus">
+				<i class="material-icons">add</i>
+				<x-flyout>
+					<h1>Neues Bild</h1>
+					<div class="inputForm">
+						<div>
+							<small>Bildname</small>
+							<input id="bildName" />
+						</div>
+						<div>
+							<small>Breite</small>
+							<input id="bildBreite" type="number" min="100" value="100" max="1000" />
+						</div>
+						<div>
+							<small>Höhe</small>
+							<input id="bildHöhe" type="number" min="100" value="100" max="1000" />
+						</div>
+						<div>
+							<small>Hintergrund</small>
+							<input id="bildBackground" type="color" value="white"/>
+						</div>
 						
-					</x-flyout>
-					
-				</button>
-				
-			</x-menu>
-			
-            <div class="container"> 
-				
-				<x-Draw width="500" height="500" style="background-color:white;" online="true"> </x-Draw>
-				
-				
-			</div>
-			<!-- App Entrypoint -->
-			<x-network url="ws://borsti1.inf.fh-flensburg.de:8080">
-			</x-network>
-	 	  <script src="js/app.js"></script>
+						<input type="button" id="createCanvas" value="Erstellen"/>
+					</div>
+				</x-flyout>
+			</button>
+			<button class="button entypo-folder">
+				<i class="material-icons">input</i>
+			</button>
+			<button class="button" id="delete">
+				<i class="material-icons">delete</i>
+			</button>
+			<button class="button" id="undo">
+				<i class="material-icons">undo</i>
+			</button>
+			<button class="button">
+				<i class="material-icons">brush</i>
+				<x-flyout class="hidden">
+					<h1>Stift anpassen</h1>
+					<x-PenEditor></x-PenEditor>
+				</x-flyout>
+			</button>
+			<button class="button">
+				<i class="material-icons">menu</i>
+				<x-flyout class="hidden">
+					<h1>Einstellungen</h1>
+				</x-flyout>
+			</button>
+		</x-menu>
+		<div class="container">
+			<x-Draw width="500" height="500" style="background-color:white;" online="true"></x-Draw>
+		</div>
+		<!-- App Entrypoint -->
+		<x-network url="ws://borsti1.inf.fh-flensburg.de:8080"></x-network>
+		<script src="js/app.js"></script>
 	</body>
-	
+
 </html>

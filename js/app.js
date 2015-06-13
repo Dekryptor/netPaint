@@ -10,15 +10,17 @@ window.addEventListener("load",function(){
 	
 	
 	document.querySelector("#undo").addEventListener("click",function() {
+		//Letzten Strick entfernen
 		if(lastIdSend){
 			draw.undo(lastIdSend);
+			//Im Netzwerk senden
 			network.sendMessage("undo",lastIdSend);
 			lastIdSend = undefined;
 		}
 	});
 	
 	network.addEventListener("undo",function(msg) {
-		draw.undo(msg.detail);
+		//Undo Nachrricht bekommen
 		console.log("undo:" + msg.detail);
 	}.bind(this));
 	
@@ -33,11 +35,9 @@ window.addEventListener("load",function(){
 				 "xPoints" 	: stroke.xPoints[stroke.xPoints.length-1],
 				 "yPoints"  : stroke.yPoints[stroke.yPoints.length-1]
 		};
-		
 		if(stroke.xPoints.length <=1){
 			paket = stroke;
 		} 
-		 
 		 var strStroke = JSON.stringify(paket);
 		 network.sendMessage("paint",strStroke);
 	}.bind(this));

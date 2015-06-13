@@ -4,7 +4,7 @@ x-flyout{
 	background-color: white ;
     
     color: black;
-    box-shadow: rgba(43, 42, 42, 0.36) 0px 0px 12px;
+    box-shadow: rgba(43, 42, 42, 0.36) 0px 5px 10px;
 	left: 90px;
 	top: 0px;
 	   
@@ -22,16 +22,27 @@ x-flyout{
 	font-size: 1em;
 	text-align: left;
     
-    border: 1px solid gray;
+    border: 1px solid rgba(220, 220, 220, 0.68);
+	min-width: 300px;
     padding-right: 40px;
     border-left: none;
     border-top: none;
     border-right: none;
 	
-	width: 300px;
+	width: 100%;
     padding-left: 16px;
-    padding-bottom: 10px;
-	margin-top: 10px;
+    padding-bottom: 10px;	
+    background-color: #FFEB3B;
+    font-family: "Roboto";
+    margin-top: 0;
+    padding-top: 15px;
+
+	
+	
+	
+	
+	
+	
 	}
 	
 	*{

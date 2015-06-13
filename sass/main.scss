@@ -26,3 +26,38 @@ body{
 
 
 
+.inputForm{
+  padding: 20px;
+  
+  
+  input[type='button']{
+        padding: 3px;
+    align-self: flex-end;
+    margin-left: 10px;
+    margin-top: 20px;
+    font-size: 2em;
+    border: rgba(204, 204, 204, 0.36) 1px solid;
+    background-color: rgba(0, 0, 0, 0);
+    color: #373830;
+    border-radius: 4px;
+  }
+
+  div{
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    margin: 10px;
+    margin-top: 20px;
+    
+    small{
+      color:  rgba(0, 0, 0, 0.7);
+      font-size: 1.3em;
+    }
+    
+    input{
+      width: 60%;
+    }
+    
+    
+  }
+}
