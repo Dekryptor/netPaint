@@ -6,7 +6,7 @@
             this.tree       = this.createShadowRoot();
             var template    = document.querySelector('link[rel="import"]').import.querySelector('#flyout-template');
             var clone       = document.importNode(template.content, true);
-            
+            this.visibility= false;
             this.tree.appendChild(clone);
       };
       
@@ -30,14 +30,26 @@
               target.addEventListener('click', 
                 function(params) {
                   //An das Elternelement Binden um die Sichtbarkeit zu toggeln
-                   if(target == event.target){
-                    self.toggleVisibility(); 
+                   if(target == event.target || target.contains(event.target)){
+                    // self.setAttribute('class','');
                 }});
                 // Wenn im Fenster nicht auf das Eltern Element und nicht auf das Flyout geklickt wird, ausblenden
               window.addEventListener("click",function() {
-                  if(self != event.target && self.parentElement != event.target){
-                    self.setAttribute('class','hidden');
-                  }
+                   // if(self != event.target && self.parentElement != event.target && self.contains(event.target) == false){
+                   // self.setAttribute('class','hidden');
+                   //}
+                   
+                   if( self.visibility && self.contains(event.target) || !(self.visbility) && self.parentElement.contains(event.target) ){
+                      self.visiblity=true;
+                      self.setAttribute('class','');
+                   }
+                   else{
+                     self.visiblity=false;
+                     self.setAttribute('class','hidden');
+                   }
+                   
+                   
+                   
               });
             }
             catch(e){
