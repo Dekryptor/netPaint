@@ -9,6 +9,27 @@ window.addEventListener("load", function () {
 	
 	function initXDraw() {
 		//Initialisiert ein neu erstelltes X-Draw Element. Es wird mit dem Netzwerk verbunden und der Menubar
+		//Alten Canvas Löschen
+		var container = document.querySelector(".container");
+		while (container.hasChildNodes()) {
+			container.removeChild(container.firstChild);
+		}
+		var roomElement 	= document.querySelector("x-room");
+		var breite 			= roomElement.getAttribute("width");
+		var hohe 			= roomElement.getAttribute("height");
+		var bg 				= roomElement.getAttribute("color");
+		
+		//Neues x-Draw Element erstellen
+		draw = document.createElement("x-draw");
+			draw.setAttribute("width", breite);
+			draw.setAttribute("height", hohe);
+			draw.setAttribute("bg-color", bg);
+		
+		//Ins Dokument Einfügen und an Eventhandler Binden
+		container.appendChild(draw);
+		
+		
+		
 		//Undo mit x-Draw Verbinden
 			document.querySelector("#undo").addEventListener("click", function () {
 				//Letzten Strick entfernen
@@ -59,11 +80,7 @@ window.addEventListener("load", function () {
 
 	//EventHandler für den "Erstellen" Knopf des "neu" dialogs
 	document.querySelector("#createCanvas").addEventListener("click", function (e) {
-		//Alten Canvas Löschen
-		var container = document.querySelector(".container");
-		while (container.hasChildNodes()) {
-			container.removeChild(container.firstChild);
-		}
+		//Formular auslesen
 		var x = document.querySelectorAll(".newForm div input");
 
 		var name	 = x[0].value;
@@ -74,14 +91,6 @@ window.addEventListener("load", function () {
 		//Im Netzwerk einen Neuen Raum erstellen
 		network.createRoom(name, username, breite, hohe, bg);
 
-		//Neues x-Draw Element erstellen
-		draw = document.createElement("x-draw");
-			draw.setAttribute("width", breite);
-			draw.setAttribute("height", hohe);
-			draw.setAttribute("bg-color", bg);
-		
-		//Ins Dokument Einfügen und an Eventhandler Binden
-		container.appendChild(draw);
 		initXDraw();
 	}.bind(this));
 
@@ -107,9 +116,17 @@ window.addEventListener("load", function () {
 	Object.observe(roomList,function(changes) {
 
 		function clickhandler(e) {
-			console.log("Hello World");
 			var room = roomList[e.target.parentElement.getAttribute("name")];
-			console.log(room);
+			network.joinRoom(room.room).then(function(p) {
+				var roomElement = document.querySelector("x-room");
+				var name  = roomElement.getAttribute("room");
+				roomElement.setAttribute("width",roomList[name].width);
+				roomElement.setAttribute("height",roomList[name].height);
+				roomElement.setAttribute("color",roomList[name].background);
+				
+				initXDraw();
+				
+			}.bind(this));
 		}
 
 

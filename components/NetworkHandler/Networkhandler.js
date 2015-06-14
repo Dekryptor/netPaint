@@ -229,7 +229,7 @@
         }
         
         if(name != undefined){
-            new Promise(function(resolve,reject) {
+            return new Promise(function(resolve,reject) {
                  //Aysnchron auf eine Antwort der Clienten Warten
                 var listner = self.addEventListener(name,function(msg) {
                     window.clearTimeout(timeoutID);
@@ -272,6 +272,7 @@
                         var room = document.createElement('x-room');
                         room.setAttribute('room',name);
                         self.appendChild(room);
+                    
                  
             });
         }
@@ -279,7 +280,7 @@
         else{
             //Einen Promise der Sofort true gibt zurückgeben
             return new Promise(function(resolve) {
-                resolve();
+                resolve("fake");
             });
         }
     };
