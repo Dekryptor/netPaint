@@ -11,6 +11,22 @@
 	</head>
 	<body>
 		<x-menu>
+			<button class="button" id="closeMenu">
+				<i class="material-icons">clear</i>
+				<x-flyout class="hidden">
+					<h1>Bild Schließen</h1>
+					<div>
+						<p>Sichern sie Ihr Bild vorher. Nicht gespeicherte Daten gehen verloren</p>
+						<input type="button" id="save" value="sichern" />
+						<div class="controls">
+							<input id="pause" value="pausieren" type="button"/>
+							<input id="close" value="schließen" type="button"/>
+						</div>
+						
+					</div>
+				</x-flyout>
+			</button>
+			
 			<button class="button">
 				<i class="material-icons">add</i>
 				<x-flyout>

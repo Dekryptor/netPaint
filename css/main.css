@@ -216,7 +216,7 @@ body {
   display: flex;
   flex-direction: row; }
 
-.textbutton, .newForm input[type='button'], .openForm ul li input {
+.textbutton, .newForm input[type='button'], .openForm ul li input, #closeMenu x-flyout div input {
   padding: 3px;
   font-size: 1.1em;
   border: #2196F3 1px solid;
@@ -251,3 +251,25 @@ body {
     justify-content: space-between;
     flex-direction: row;
     align-items: baseline; }
+
+#closeMenu {
+  border: 1px solid Red;
+  border-radius: 30px; }
+  #closeMenu i {
+    color: red; }
+  #closeMenu x-flyout h1 {
+    background-color: red; }
+  #closeMenu x-flyout div {
+    padding: 20px;
+    display: flex;
+    flex-direction: column; }
+    #closeMenu x-flyout div input {
+      color: red;
+      border-color: red;
+      text-align: center; }
+    #closeMenu x-flyout div div {
+      display: flex;
+      flex-direction: row;
+      margin-top: 30px;
+      justify-content: space-between;
+      padding: 0; }

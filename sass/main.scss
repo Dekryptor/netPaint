@@ -95,3 +95,37 @@ body{
   }
   
 }
+
+
+#closeMenu{
+  border: 1px solid Red;
+  border-radius: 30px;
+  i{color:red;}
+  
+  x-flyout h1{
+    background-color: red;
+  }
+  
+  x-flyout div{
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    
+    input{
+      @extend .textbutton;
+      color:red;
+      border-color: red;
+          text-align: center;
+    }
+    
+    div{
+      display: flex;
+      flex-direction: row;
+      margin-top: 30px;
+      justify-content: space-between;
+      padding: 0;
+    }
+    
+  }
+  
+}

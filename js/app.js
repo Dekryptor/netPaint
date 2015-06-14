@@ -94,6 +94,9 @@ window.addEventListener("load", function () {
 		initXDraw();
 	}.bind(this));
 
+
+
+//Die Events für den "Open"-Dialog erstellen
 	//Sich an Announce Nachrrichten anderer clients binden - Wenn eine Empfangen wird, sie in das roomList - Directory einfügen
 	network.addEventListener("announce", function (msg) {
 		var room = msg.detail;
@@ -112,18 +115,21 @@ window.addEventListener("load", function () {
 	
 	
 	
-	//Das Model Überwachen
+	//Die RoomList Überwachen
 	Object.observe(roomList,function(changes) {
 
 		function clickhandler(e) {
+			//Namen des Geklickten Raumes herausfinden
 			var room = roomList[e.target.parentElement.getAttribute("name")];
+			//Dem Raum Beitreten
 			network.joinRoom(room.room).then(function(p) {
+				//Bei erfolg, das Raum-Element erweitern
 				var roomElement = document.querySelector("x-room");
 				var name  = roomElement.getAttribute("room");
 				roomElement.setAttribute("width",roomList[name].width);
 				roomElement.setAttribute("height",roomList[name].height);
 				roomElement.setAttribute("color",roomList[name].background);
-				
+				//Den Canvas Initialisieren.
 				initXDraw();
 				
 			}.bind(this));
@@ -146,6 +152,7 @@ window.addEventListener("load", function () {
 				document.querySelector("#room-list").appendChild(elem);
 			}
 			else if(changes[i].type == "delete" ){
+				//Element Entfernen wenn es aus dem Model entfernt wurde
 				var elem =document.querySelector("#room-list li[name='"+changes[i].name+"']");
 				var root = elem.parentElement;
 				root.removeChild(elem);
@@ -158,7 +165,16 @@ window.addEventListener("load", function () {
 	}.bind(this));
 
 
+//Der Programmteil für die "Close-UI"
 
+document.querySelector("#close").addEventListener("click",function() {
+	var container = document.querySelector(".container");
+		while (container.hasChildNodes()) {
+			container.removeChild(container.firstChild);
+		}
+		network.joinRoom(); //Dem Broadcast Channel Joinen
+		
+}.bind(this));
 
 
 
