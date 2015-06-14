@@ -216,27 +216,38 @@ body {
   display: flex;
   flex-direction: row; }
 
-.inputForm {
+.textbutton, .newForm input[type='button'], .openForm ul li input {
+  padding: 3px;
+  font-size: 1.1em;
+  border: #2196F3 1px solid;
+  background-color: transparent;
+  color: #2196F3;
+  border-radius: 4px; }
+
+.newForm {
   padding: 20px; }
-  .inputForm input[type='button'] {
-    padding: 3px;
-    align-self: flex-end;
-    margin-left: 10px;
-    margin-top: 20px;
-    font-size: 1.5em;
-    border: #2196F3 1px solid;
-    background-color: transparent;
-    color: #2196F3;
-    border-radius: 4px;
-    position: relative; }
-  .inputForm div {
+  .newForm div {
     display: flex;
     width: 100%;
     justify-content: space-between;
     margin: 10px;
     margin-top: 20px; }
-    .inputForm div small {
+    .newForm div small {
       color: rgba(0, 0, 0, 0.7);
       font-size: 1.3em; }
-    .inputForm div input {
+    .newForm div input {
       width: 60%; }
+
+.openForm {
+  padding: 20px; }
+  .openForm ul {
+    list-style: none;
+    padding: 0; }
+  .openForm p {
+    font-size: 1.2em; }
+  .openForm li {
+    display: flex;
+    padding: 5px;
+    justify-content: space-between;
+    flex-direction: row;
+    align-items: baseline; }

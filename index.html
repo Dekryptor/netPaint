@@ -15,7 +15,7 @@
 				<i class="material-icons">add</i>
 				<x-flyout>
 					<h1>Neues Bild</h1>
-					<div class="inputForm">
+					<div class="newForm">
 						<div>
 							<small>Bildname</small>
 							<input type="text" id="bildName" />
@@ -45,14 +45,19 @@
 				<i class="material-icons">input</i>
 				<x-flyout class="hidden">
 					<h1>Bild Öffnen</h1>
-					<div class="scaffholder">
+					<div class="openForm">
 						<div>
 							<p>Das letzte Lokale Bild Öffnen:</p>	
 						</div>
 						<div>
 							<hr/>
 							<p>Im Netzwerk gefundene Räume: </p>
-							<ul id="room-list"></ul>
+							<ul id="room-list">
+								<template>
+										<p></p>
+										<input type="button" value="beitreten"/>
+								</template>
+							</ul>
 						</div>
 					</div>
 				</x-flyout>

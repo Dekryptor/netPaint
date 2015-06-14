@@ -5,6 +5,7 @@ window.addEventListener("load", function () {
 	var penEditor = document.querySelector('x-PenEditor');
 	var lastIdSend;
 	var roomList = {};
+	var listTemplate = document.querySelector("#room-list template");
 	
 	function initXDraw() {
 		//Initialisiert ein neu erstelltes X-Draw Element. Es wird mit dem Netzwerk verbunden und der Menubar
@@ -63,7 +64,7 @@ window.addEventListener("load", function () {
 		while (container.hasChildNodes()) {
 			container.removeChild(container.firstChild);
 		}
-		var x = document.querySelectorAll(".inputForm div input");
+		var x = document.querySelectorAll(".newForm div input");
 
 		var name	 = x[0].value;
 		var breite 	 = x[1].value;
@@ -89,22 +90,55 @@ window.addEventListener("load", function () {
 		var room = msg.detail;
 		roomList[room.room] = room;
 		roomList[room.room].timestamp = Date.now();
-		console.log(roomList);
 	});
 
 	//Alle 10s alte Einträge aus der Roomlist löschen
 	window.setInterval(function () {
 		for (var i in roomList) {
-			if (roomList[i].timestamp < Date.now() + 10000) {
+			if (roomList[i].timestamp+ 10000< Date.now() ) {
 				delete roomList[i];
 			}
 		}
 	}.bind(this), 10000);
 	
+	
+	
 	//Das Model Überwachen
 	Object.observe(roomList,function(changes) {
-		console.log("something changed");
-	});
+
+		function clickhandler(e) {
+			console.log("Hello World");
+			var room = roomList[e.target.parentElement.getAttribute("name")];
+			console.log(room);
+		}
+
+
+		for(var i=0; i< changes.length;i++){
+			
+			//Wenn ein neues Hinzugefügt worden ist
+			if(changes[i].type === "add"){
+				var elem = document.createElement("li");
+	            var clone       = document.importNode(listTemplate.content, true);
+	            elem.appendChild(clone);
+				
+				elem.querySelector("p").textContent = changes[i].name;
+				elem.setAttribute("name",changes[i].name);
+				
+				elem.querySelector("input").addEventListener("click",clickhandler.bind(this));
+				
+				document.querySelector("#room-list").appendChild(elem);
+			}
+			else if(changes[i].type == "delete" ){
+				var elem =document.querySelector("#room-list li[name='"+changes[i].name+"']");
+				var root = elem.parentElement;
+				root.removeChild(elem);
+			}
+			
+			
+		}
+
+
+	}.bind(this));
 
 
 
