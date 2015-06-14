@@ -6,6 +6,30 @@ window.addEventListener("load", function () {
 	var lastIdSend;
 	var roomList = {};
 	var listTemplate = document.querySelector("#room-list template");
+	var opened = false;
+	
+	
+	function hideCreateUI(p) {
+		//Versteckt den Öffnen / Schließen dialog und zeigt den Schließen dialog.
+		
+		if(p){
+			opened=true;
+			document.querySelector("#openMenu").setAttribute("class","button hidden");
+			document.querySelector("#newMenu").setAttribute("class","button hidden");
+			document.querySelector("#closeMenu").setAttribute("class","button");
+			
+		}
+		else{
+			document.querySelector("#openMenu").setAttribute("class","button ");
+			document.querySelector("#newMenu").setAttribute("class","button ");
+			document.querySelector("#closeMenu").setAttribute("class","button hidden");
+			
+		}
+		
+	}
+	
+	
+	
 	
 	function initXDraw() {
 		//Initialisiert ein neu erstelltes X-Draw Element. Es wird mit dem Netzwerk verbunden und der Menubar
@@ -92,6 +116,7 @@ window.addEventListener("load", function () {
 		network.createRoom(name, username, breite, hohe, bg);
 
 		initXDraw();
+		hideCreateUI(true);
 	}.bind(this));
 
 
@@ -166,18 +191,87 @@ window.addEventListener("load", function () {
 
 
 //Der Programmteil für die "Close-UI"
-
-document.querySelector("#close").addEventListener("click",function() {
+function closeDraw() {
 	var container = document.querySelector(".container");
 		while (container.hasChildNodes()) {
 			container.removeChild(container.firstChild);
 		}
 		network.joinRoom(); //Dem Broadcast Channel Joinen
+	hideCreateUI(false);
+}
+
+
+document.querySelector("#close").addEventListener("click",closeDraw.bind(this));
+
+
+
+document.querySelector("#save").addEventListener("click",function() {
+	var self = document.querySelector("#save");
+	var lnk = draw.getFile();
+	self.href = lnk;
+	var name = prompt("Geben sie Einen Dateinamen ein:");
+	if(name.length==0){name = document.querySelector("x-room").getAttribute("room");}
+	self.download = name+".png";
+		
+}.bind(this));
+
+document.querySelector("#pause").addEventListener("click",function() {
+	//Paintstack Stringifyen
+	var ps = new Array(draw.paintstack.length);
+	for (var i = 0; i < draw.paintstack.length; i++) {
+		//Kopie des Arrays Erstellen aber die X/Y-Punkte Stringifyen
+		ps[i]={
+			"id"		: draw.paintstack[i].id,
+			"color"		: draw.paintstack[i].color,
+			"size"		: draw.paintstack[i].size,
+			"special" 	: draw.paintstack[i].special,
+			"time"		: draw.paintstack[i].time,
+			"xPoints"	: JSON.stringify(draw.paintstack[i].xPoints),
+			"yPoints"	: JSON.stringify(draw.paintstack[i].yPoints)
+		};
+
+	}
+	var roomElement 	= document.querySelector("x-room");
+				
+	var picture = {
+		"paintstack" : JSON.stringify(ps),
+		"width": roomElement.getAttribute("width"),
+		"height": roomElement.getAttribute("height"),
+		"color": roomElement.getAttribute("color"),
+		"name"	: roomElement.getAttribute("room")
+		
+	};
+	localStorage["latestStack"] = JSON.stringify(picture);
+	
+	closeDraw();
 		
 }.bind(this));
 
 
-
+document.querySelector("#resume").addEventListener("click",function() {
+		var settings = JSON.parse( localStorage["latestStack"]);
+		var tempstack = JSON.parse(settings.paintstack);
+		var paintstack = new Array(tempstack.length);
+		
+		for(var i in tempstack){
+			paintstack[i]= {
+			"id"		: tempstack[i].id,
+			"color"		: tempstack[i].color,
+			"size"		: tempstack[i].size,
+			"special" 	: tempstack[i].special,
+			"time"		: tempstack[i].time,
+			"xPoints"	: JSON.parse(tempstack[i].xPoints),
+			"yPoints"	: JSON.parse(tempstack[i].yPoints)
+			};
+		} 
+		
+		network.createRoom(settings.name, "admin", settings.width, settings.height, settings.color);
+		initXDraw();
+		draw.paintstack = paintstack;
+		hideCreateUI(true);
+		//TODO: Stife sichern und wiederherstellen
+		
+}.bind(this));
 
 
 

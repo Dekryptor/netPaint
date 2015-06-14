@@ -23,6 +23,10 @@ body{
     
 }
 
+.hidden{
+  display: none;
+}
+
 
 .textbutton{
     padding: 3px;
@@ -72,6 +76,17 @@ body{
 .openForm{
   padding: 20px;
   
+  div:first-child{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+  }
+  
+  hr{
+    width: 100%;
+    border: #EAEAEA 1px solid;
+  }
+  
   ul{
     list-style: none;
     padding: 0;
@@ -89,7 +104,7 @@ body{
     align-items: baseline;
   }
   
-  ul li input{
+  input{
     @extend .textbutton;
    
   }
@@ -116,6 +131,15 @@ body{
       color:red;
       border-color: red;
           text-align: center;
+    }
+    
+    a{
+      @extend input;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border: none;
+      text-decoration: none;
     }
     
     div{

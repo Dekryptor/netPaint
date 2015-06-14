@@ -162,6 +162,11 @@
     xdraw.setPen = function (p) {
         this.protoPen = Object.create(p);
     };
+    
+    xdraw.getFile = function() {
+        var can = this.shadowDOM.querySelector("canvas");
+        return can.toDataURL('image/png');
+    };
 
 
     xdraw.add = function (line) {

@@ -216,7 +216,10 @@ body {
   display: flex;
   flex-direction: row; }
 
-.textbutton, .newForm input[type='button'], .openForm ul li input, #closeMenu x-flyout div input {
+.hidden {
+  display: none; }
+
+.textbutton, .newForm input[type='button'], .openForm input, #closeMenu x-flyout div input, #closeMenu x-flyout div a {
   padding: 3px;
   font-size: 1.1em;
   border: #2196F3 1px solid;
@@ -235,11 +238,18 @@ body {
     .newForm div small {
       color: rgba(0, 0, 0, 0.7);
       font-size: 1.3em; }
-    .newForm div input {
+    .newForm div input, .newForm #closeMenu x-flyout div a, #closeMenu x-flyout .newForm div a {
       width: 60%; }
 
 .openForm {
   padding: 20px; }
+  .openForm div:first-child {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; }
+  .openForm hr {
+    width: 100%;
+    border: #EAEAEA 1px solid; }
   .openForm ul {
     list-style: none;
     padding: 0; }
@@ -263,10 +273,16 @@ body {
     padding: 20px;
     display: flex;
     flex-direction: column; }
-    #closeMenu x-flyout div input {
+    #closeMenu x-flyout div input, #closeMenu x-flyout div a {
       color: red;
       border-color: red;
       text-align: center; }
+    #closeMenu x-flyout div a {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border: none;
+      text-decoration: none; }
     #closeMenu x-flyout div div {
       display: flex;
       flex-direction: row;
