@@ -197,13 +197,20 @@
 		this.ws.send(data);
 	};
     
-    Network.createRoom = function(name) {
+    Network.createRoom = function(name,username,width,height,color) {
         var self = this;
          //Den Einen neuen EncryptionHandler für den Raum Erstellen
          self.cryptoManager = new EncryptionHandler(name);
          //  ROOM Objekt erstellen
-            var room = document.createElement('x-room');
-                room.setAttribute('room',name);
+        while(self.hasChildNodes()){
+            self.removeChild(self.firstChild);
+        }
+         var room = document.createElement('x-room');
+             room.setAttribute('room',name);
+             room.setAttribute('username',username);
+             room.setAttribute('width',width);
+             room.setAttribute('height',height);
+             room.setAttribute('color',color);  
          self.appendChild(room);
                 
     

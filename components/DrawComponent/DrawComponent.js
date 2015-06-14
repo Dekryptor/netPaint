@@ -27,6 +27,7 @@
     //LifecycleCallbacks Registrieren
     xdraw.attachedCallback = function () {
         var self = this;
+        this.background = this.getAttribute("bg-color");
         var can = self.shadowDOM.querySelector("canvas");
         can.setAttribute("width", self.getAttribute("width"));
         can.setAttribute("height", self.getAttribute("height"));
@@ -92,6 +93,7 @@
         var can = that.shadowDOM.querySelector("canvas");
         can.setAttribute("width", that.getAttribute("width"));
         can.setAttribute("height", that.getAttribute("height"));
+        this.background = this.getAttribute("bg-color");
     };
     xdraw.createdCallback = function () {
         this.shadowDOM = this.createShadowRoot();
@@ -100,7 +102,6 @@
         this.shadowDOM.appendChild(clone);
         this.paintstack = new Array; //Paintstack Hashtable erstellen.
         this.renderState = 0;
-        var imageBuffer;
         this.protoPen = new Pen(1, 0, 0, 0, false);
         this.drawCandidate = new PaintOperation();
         var canvas = this.shadowDOM.querySelector("canvas");
@@ -108,7 +109,8 @@
         var candidate = this.drawCandidate;
         this.render = function () {
             var paintstack = this.paintstack;
-            ctx.clearRect(0, 0, this.clientWidth, this.clientHeight);
+            ctx.fillStyle = this.background;
+            ctx.fillRect(0, 0, this.clientWidth, this.clientHeight);
             for (var i = 0; i < this.paintstack.length; i++) {
                 //Painstack Malen
                 ctx.strokeStyle = paintstack[i].color;

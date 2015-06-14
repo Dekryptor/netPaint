@@ -21,7 +21,7 @@ x-flyout{
 	h1 {
 	font-size: 1em;
 	text-align: left;
-    
+    color:white;
     border: 1px solid rgba(220, 220, 220, 0.68);
 	min-width: 300px;
     padding-right: 40px;
@@ -32,7 +32,7 @@ x-flyout{
 	width: 100%;
     padding-left: 16px;
     padding-bottom: 10px;	
-    background-color: #FFEB3B;
+    background-color: $color-accent;
     font-family: "Roboto";
     margin-top: 0;
     padding-top: 15px;

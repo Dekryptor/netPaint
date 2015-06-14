@@ -27,7 +27,7 @@ x-menu::shadow {
             content:"";
             width: 50px;
             height: 50px;
-            background-color: black;
+            background-color:  $color-accent;
             position: absolute;
             z-index: 0;
             top: -1px;
@@ -72,8 +72,8 @@ x-menu::shadow {
   
     width: 50px;
     height: 50px;
-    border-radius: 30px;
-    border: 1px solid;
+    color: $color-accent;
+    border: none;
     background-color: transparent;
     font-size: 25px;
     transition: all 0.5s;
@@ -81,11 +81,11 @@ x-menu::shadow {
     display: flex;
     justify-content: center;
     align-items: center;
-    color: black;
+    
     
     
     i:first-child{
-           color: black;
+           color: $color-accent;
            display: block;
             }
     
@@ -110,7 +110,7 @@ x-menu::shadow {
             content:"";
             width: 0px;
             height: 0px;
-            background-color: black;
+            background-color: $color-accent-900;
             position: absolute;
             z-index: 0;
             transition: all ease 0.4s;
@@ -135,6 +135,7 @@ x-menu::shadow {
 
 hr{
     width: 100%;
+    border: #EAEAEA 1px solid;
 }
 
 
@@ -149,8 +150,8 @@ x-menu {
     button{
     width: 50px;
     height: 50px;
-    border-radius: 30px;
-    border: 1px solid;
+    color: $color-accent;
+    border: none;
     margin-top: 10px;
     margin-bottom: 10px;
     background-color: transparent;
@@ -162,6 +163,9 @@ x-menu {
     align-items: center;
     justify-content: center;
     
+    i{
+        color: $color-accent;
+    }
 
     
    &:focus{

@@ -3,7 +3,7 @@
     	
     //Den Protoypen Erstellen und Erweitern
     var Room = Object.create(HTMLElement.prototype);
-    
+    Room.maximum = 3;
     Room.notifyMessage = function(envelope) {
         //Ein Event schicken, an alle Elemente die sich an den Typ der Message gebunden haben.
         var event = new CustomEvent(envelope.topic, { 'detail': envelope.data });
@@ -15,6 +15,22 @@
         var name = this.getAttribute("username");
         this.Network.sendMessage("keepAlive",name);
     };
+    
+    Room.announceRoom = function() {
+        if(this.getPersonCount() < this.maximum){
+            var msg = {
+                "room" : this.getAttribute("room"),
+                "user" : this.getPersonCount(),
+                "width": this.getAttribute("width"),
+                "height" :this.getAttribute("height"), 
+                "background" : this.getAttribute("color")
+            };
+            
+            this.Network.sendDefaultEncryptedMessage("announce",msg);
+        }
+    };
+    
+    
     Room.cleanKeepAliveArray = function() {
         //Clients die innerhalb von 10s kein keepAlive geschickt haben, löschen
         var persons = this.persons;
@@ -38,7 +54,7 @@
         worker.addEventListener("message",function(msg) {
             if(msg.data.data == self.getAttribute('room')){
                 // Enschlüsselte "join"-Anfrage für den Aktuellen Raum bekommen.
-                if(self.getPersonCount() < 3){
+                if(self.getPersonCount() < self.maximum){
                     //Join Anfrage Bestätigen
                     self.Network.sendDefaultEncryptedMessage(self.getAttribute('room'),self.Network.cryptoManager.getInitVektor()); 
                 }
@@ -60,6 +76,7 @@
             self.persons[msg.detail] = new Date().getTime();
         });
         
+        window.setInterval(this.announceRoom.bind(this),5000);
         window.setInterval(this.sendKeepAlive.bind(this),5000); //Alle 5s ein Keepalive Schicken
         window.setInterval(this.cleanKeepAliveArray.bind(this),8000); //Alle 8s das Keepalive array aufräumen
         
