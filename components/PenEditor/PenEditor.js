@@ -89,6 +89,7 @@
              self.tree.querySelectorAll("input")[i].addEventListener("input",modifyPenProto.bind(this));
            
            }
+           self.tree.querySelector("input[type='checkbox']").addEventListener("click",modifyPenProto.bind(this));
            
            function restoreFromRecent(event) {
              var index = parseInt(event.target.getAttribute("data"));

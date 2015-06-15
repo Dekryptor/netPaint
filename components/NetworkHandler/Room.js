@@ -72,12 +72,16 @@
         
         this.Network.addEventListener("keepAlive",function(msg) {
             //Der KeepAlive wird Periodisch gesendet um anderen Mitgliedern im Raum zu signalisieren das man noch da ist.  
-            //TODO: Handeln
+            var before = self.getPersonCount();
             self.persons[msg.detail] = new Date().getTime();
+            if(before == 2 && self.getPersonCount() == 3 && self.getAttribute("passive")!= "true"  && self.createdTime +5000 < Date.now() ){
+                //Ein neuer Client Kam dazu - Man selber ist nicht passiv und schon mindestens 5s im Raum - Dann darf man den anderen zwingen passiv zu werden.
+                 self.Network.sendMessage("goPassive",msg.detail); 
+            }
         });
         
         window.setInterval(this.announceRoom.bind(this),5000);
-        window.setInterval(this.sendKeepAlive.bind(this),5000); //Alle 5s ein Keepalive Schicken
+        window.setInterval(this.sendKeepAlive.bind(this),2000); //Alle 5s ein Keepalive Schicken
         window.setInterval(this.cleanKeepAliveArray.bind(this),8000); //Alle 8s das Keepalive array aufräumen
         
     };
@@ -85,6 +89,7 @@
     	
     Room.createdCallback = function() 
     {
+        this.createdTime = Date.now();
         if(this.Network == undefined && this.parentNode != undefined){
             this.Network = this.parentNode;
             this.init();

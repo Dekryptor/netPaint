@@ -7,17 +7,37 @@ window.addEventListener("load", function () {
 	var roomList = {};
 	var listTemplate = document.querySelector("#room-list template");
 	var opened = false;
-
+	var passive = false;
 
 	function getSettings() {
 		var formular = document.querySelectorAll(".newForm div input");
+		var roomElement = document.querySelector("x-room");
+		var name,color,username,width,height;
+		if(roomElement){
+			//Wenn gejoined wurde die einstellungen aus dem Raum übernehmen
+			name 		= roomElement.getAttribute("name");
+			username 	= roomElement.getAttribute("username"); 
+			color 		= roomElement.getAttribute("color");
+			width		= roomElement.getAttribute("width");
+			height		= roomElement.getAttribute("height");	
+		}
+		//Wenn nicht gejoined wurde
+		else{
+			name 		= formular[0].value;
+			username 	= formular[7].value; 
+			color 		= formular[6].value;
+			width		= formular[4].value;
+			height		= formular[5].value;	
+		}
+		
+		
 		return {
 				"pens"		: JSON.stringify(penEditor.recentPens.slice(0, 4)),
-				"width"		: formular[4].value,
-				"height"	: formular[5].value,
-				"color"		: formular[6].value,
-				"username"	: formular[7].value,
-				"name"		: formular[0].value
+				"width"		: width,
+				"height"	: height,
+				"color"		: color,
+				"username"	: username,
+				"name"		: name
 		};		
 	};
 	
@@ -102,7 +122,8 @@ window.addEventListener("load", function () {
 		});
 		//Neue Striche von X-draw im Netzwerk verbreiten
 		draw.addEventListener("newLine", function () {
-			var stroke = draw.drawCandidate;
+			if(!passive){
+				var stroke = draw.drawCandidate;
 			lastIdSend = stroke.id;
 			var paket;
 			paket = {
@@ -115,6 +136,7 @@ window.addEventListener("load", function () {
 			}
 			var strStroke = JSON.stringify(paket);
 			network.sendMessage("paint", strStroke);
+			}
 		}.bind(this));
 	
 		//Neuen Strich aus dem Netzwerk erhalten
@@ -159,6 +181,17 @@ window.addEventListener("load", function () {
 	}
 
 
+	network.addEventListener("goPassive", function (msg) {
+		if(msg.detail == getSettings().username){
+				 passive = true;														//Verhindern das über das Netzwerk Striche Gesendet werden
+				 document.querySelector("x-room").setAttribute("passive","true");		//Verhindern das der Client andere in den Passiven Modus Versetzt
+				 document.querySelector("x-draw").setAttribute("class","locked");		//Den Canvas rot umleuchten um den Locked Status anzuzeigen
+				 document.querySelector("x-menu").setAttribute("class","collapsed");	//Die Menuleiste in der Seite verschwinden lassen
+				 
+		}
+	});
+
+
 
 	//Die Events für den "Open"-Dialog erstellen
 	//Sich an Announce Nachrrichten anderer clients binden - Wenn eine Empfangen wird, sie in das roomList - Directory einfügen
@@ -183,16 +216,19 @@ window.addEventListener("load", function () {
 			
 		//Namen des Geklickten Raumes herausfinden
 		var room = roomList[e.target.parentElement.getAttribute("name")];
+		var username = prompt("Ihr Benutzername zum beitreten:");
 		//Dem Raum Beitreten
 		network.joinRoom(room.room).then(function (p) {
 			//Bei erfolg, das Raum-Element erweitern
 			var roomElement = document.querySelector("x-room");
 			var name = roomElement.getAttribute("room");
+			roomElement.setAttribute("username", username);
 			roomElement.setAttribute("width", roomList[name].width);
 			roomElement.setAttribute("height", roomList[name].height);
 			roomElement.setAttribute("color", roomList[name].background);
 			//Den Canvas Initialisieren.
 			initXDraw();
+			hideCreateUI(true);
 		}.bind(this));
 	}
 
