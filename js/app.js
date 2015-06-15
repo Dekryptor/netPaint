@@ -253,31 +253,9 @@ window.addEventListener("load", function () {
 
 	document.querySelector("#pause").addEventListener("click", function () {
 		//Speichert das Bild und die Einstellungen im LocalStorage unter "lastPicture"
-		//Paintstack Stringifyen
-		var ps = new Array(draw.paintstack.length);
-		for (var i = 0; i < draw.paintstack.length; i++) {
-			//Kopie des Arrays Erstellen aber die X/Y-Punkte Stringifyen
-			ps[i] = {
-				"id": draw.paintstack[i].id,
-				"color": draw.paintstack[i].color,
-				"size": draw.paintstack[i].size,
-				"special": draw.paintstack[i].special,
-				"time": draw.paintstack[i].time,
-				"xPoints": JSON.stringify(draw.paintstack[i].xPoints),
-				"yPoints": JSON.stringify(draw.paintstack[i].yPoints)
-
-			};
-
-		}
-		var roomElement = document.querySelector("x-room");
-
 		var picture = {
-			"paintstack": JSON.stringify(ps),
-			"pens": JSON.stringify(penEditor.recentPens.slice(0, 4)),
-			"width": roomElement.getAttribute("width"),
-			"height": roomElement.getAttribute("height"),
-			"color": roomElement.getAttribute("color"),
-			"name": roomElement.getAttribute("room")
+			"paintstack": draw.toString(),
+			"settings"	: JSON.stringify(getSettings())
 
 		};
 		localStorage["lastPicture"] = JSON.stringify(picture);
@@ -287,33 +265,11 @@ window.addEventListener("load", function () {
 
 	document.querySelector("#resume").addEventListener("click", function () {
 		//Läd ein altes Bild inkl Einstellungen wieder zum bearbeiten.
-		var settings = JSON.parse(localStorage["lastPicture"]);
-		var tempstack = JSON.parse(settings.paintstack);
-		var paintstack = new Array(tempstack.length);
-		var pens = JSON.parse(settings.pens);
-
-		for (var i in pens) {
-			if(pens[i] =! null){
-				penEditor.savePen(pens[i]);
-			}
-		}
-
-
-		for (var i in tempstack) {
-			paintstack[i] = {
-				"id": tempstack[i].id,
-				"color": tempstack[i].color,
-				"size": tempstack[i].size,
-				"special": tempstack[i].special,
-				"time": tempstack[i].time,
-				"xPoints": JSON.parse(tempstack[i].xPoints),
-				"yPoints": JSON.parse(tempstack[i].yPoints)
-			};
-		}
-
-		network.createRoom(settings.name, "admin", settings.width, settings.height, settings.color);
+		var picture = JSON.parse(localStorage["lastPicture"]);
+		var setting = JSON.parse(picture.settings);
+		network.createRoom(setting.name, "admin", setting.width, setting.height, setting.color);
 		initXDraw();
-		draw.paintstack = paintstack;
+		draw.fromString(picture.paintstack);
 		hideCreateUI(true);
 
 	}.bind(this));

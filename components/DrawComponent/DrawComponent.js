@@ -167,10 +167,51 @@
         var can = this.shadowDOM.querySelector("canvas");
         return can.toDataURL('image/png');
     };
+    xdraw.toString = function() {
+        //Speichert alle wichtigen informationen in einem Speicherbaren String
+		var ps = new Array(this.paintstack.length);
+		for (var i = 0; i < this.paintstack.length; i++) {
+			//Kopie des Arrays Erstellen aber die X/Y-Punkte Stringifyen
+			ps[i] = {
+				"id": this.paintstack[i].id,
+				"color": this.paintstack[i].color,
+				"size": this.paintstack[i].size,
+				"special": this.paintstack[i].special,
+				"time": this.paintstack[i].time,
+				"xPoints": JSON.stringify(this.paintstack[i].xPoints),
+				"yPoints": JSON.stringify(this.paintstack[i].yPoints)
 
+			};
+		}
+        return JSON.stringify(ps);
+    };
+    
+        xdraw.fromString = function(information) {
+        //Speichert alle wichtigen informationen in einem Speicherbaren String
+            var tempstack = JSON.parse(information);
+		    var paintstack = new Array(tempstack.length);
+            
+    		for (var i in tempstack) {
+    			paintstack[i] = {
+    				"id": tempstack[i].id,
+    				"color": tempstack[i].color,
+    				"size": tempstack[i].size,
+    				"special": tempstack[i].special,
+    				"time": tempstack[i].time,
+    				"xPoints": JSON.parse(tempstack[i].xPoints),
+    				"yPoints": JSON.parse(tempstack[i].yPoints)
+    			};
+    		}
+            
+            this.paintstack = paintstack;
+
+    };
+    
+    
+    
+    
 
     xdraw.add = function (line) {
-    
         //Fügt eine Linie des Types PaintOperation hinzu
         var found = false;
         var index;
