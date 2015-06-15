@@ -35,7 +35,12 @@ body{
     background-color: rgba(0, 0, 0, 0);
     color: $color-accent;
     border-radius: 4px;
+    
 }
+    .delete{
+      color:red;
+      border-color: red;
+    }
 
 
 
@@ -160,4 +165,21 @@ body{
     
   }
   
+}
+
+
+#settingsMenu{
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    
+    div{
+      display: flex;
+      flex-direction: row;
+      flex-wrap:wrap;
+      margin-top: 10px;
+      *{
+        margin: 4px;
+      }
+    }
 }

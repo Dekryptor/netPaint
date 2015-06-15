@@ -227,6 +227,10 @@ body {
   color: #2196F3;
   border-radius: 4px; }
 
+.delete {
+  color: red;
+  border-color: red; }
+
 .newForm {
   padding: 20px; }
   .newForm #sizeButtons {
@@ -294,3 +298,15 @@ body {
       margin-top: 30px;
       justify-content: space-between;
       padding: 0; }
+
+#settingsMenu {
+  padding: 20px;
+  display: flex;
+  flex-direction: column; }
+  #settingsMenu div {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-top: 10px; }
+    #settingsMenu div * {
+      margin: 4px; }
