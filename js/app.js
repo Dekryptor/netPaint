@@ -330,6 +330,7 @@ window.addEventListener("load", function () {
 		var selectElement = document.querySelector("#settingsMenu select");
 		var selectedSetting = selectElement.value;
 		var setting = settingStore[selectedSetting];
+		localStorage["latestSetting"]= selectedSetting;
 		setSettings(setting);
 	});
 
@@ -358,10 +359,19 @@ Object.observe(settingStore, function (changes) {
 
 
 
-var localSettingStore = JSON.parse(localStorage["settingStore"]);
-for (var i in localSettingStore) {
-	settingStore[i] = localSettingStore[i];
-}
+(function(){
+	//Settings laden
+	var localSettingStore = JSON.parse(localStorage["settingStore"]);
+	for (var i in localSettingStore) {
+		settingStore[i] = localSettingStore[i];
+	}
+
+	//Letzte Einstellung Laden
+	var latestSetting = localStorage["latestSetting"];
+	if(settingStore[latestSetting]){
+		setSettings(settingStore[latestSetting]);
+	}
+})();
 	
 	
 });
