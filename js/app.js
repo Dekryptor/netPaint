@@ -16,7 +16,8 @@ window.addEventListener("load", function () {
 				"width"		: formular[4].value,
 				"height"	: formular[5].value,
 				"color"		: formular[6].value,
-				"username"	: formular[7].value
+				"username"	: formular[7].value,
+				"name"		: formular[0].value
 		};		
 	};
 	
@@ -131,15 +132,9 @@ window.addEventListener("load", function () {
 	//EventHandler für den "Erstellen" Knopf des "neu" dialogs
 	document.querySelector("#createCanvas").addEventListener("click", function (e) {
 		//Formular auslesen
-		var x = document.querySelectorAll(".newForm div input");
-		var name 	= x[0].value;
-		var breite 	= x[4].value;
-		var hohe 	= x[5].value;
-		var bg 		= x[6].value;
-		var username = x[7].value;
+		var setting = getSettings();
 		//Im Netzwerk einen Neuen Raum erstellen
-		network.createRoom(name, username, breite, hohe, bg);
-
+		network.createRoom(setting.name, setting.username, setting.width, setting.height, setting.color);
 		initXDraw();
 		hideCreateUI(true);
 	}.bind(this));
@@ -274,8 +269,7 @@ window.addEventListener("load", function () {
 
 	}.bind(this));
 
-	//Teil für Einstellungssätze Speichern / Laden
-
+//Teil für Einstellungssätze Speichern / Laden
 	var settingStore = {};
 
 	//Den Einstellung-sichern button auswählen und einen Eventhandler anfügen
@@ -325,13 +319,6 @@ Object.observe(settingStore, function (changes) {
 		}
 	}
 }.bind(this));
-
-
-
-
-
-
-
 
 
 

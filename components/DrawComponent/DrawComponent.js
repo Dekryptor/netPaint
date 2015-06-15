@@ -106,8 +106,9 @@
         this.drawCandidate = new PaintOperation();
         var canvas = this.shadowDOM.querySelector("canvas");
         var ctx = canvas.getContext("2d");
-        var candidate = this.drawCandidate;
+        this.drawCandidate;
         this.render = function () {
+            
             var paintstack = this.paintstack;
             ctx.fillStyle = this.background;
             ctx.fillRect(0, 0, this.clientWidth, this.clientHeight);
@@ -123,8 +124,7 @@
                 ctx.stroke();
                 ctx.closePath();
             }
-            //DrawCandidate darüber zeichnen
-            this.renderState = paintstack.length;
+  
             if (this.drawCandidate) {
                 ctx.strokeStyle = this.drawCandidate.color;
                 ctx.lineWidth = this.drawCandidate.size;
