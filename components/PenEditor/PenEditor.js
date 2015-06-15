@@ -6,9 +6,29 @@
         this.green = g;
         this.special = s ;
         this.getColor = function() {
-          return('#'+ this.red.toString(16) + this.green.toString(16)+this.blue.toString(16)); 
-        };
-      }
+          var rs,bs,gs;
+          if(this.red <16){
+              rs = "0"+this.red.toString(16);
+          }
+          else{
+              rs = this.red.toString(16);
+          }
+          if(this.blue <16){
+              bs = "0"+this.blue.toString(16);
+          }
+          else{
+              bs = this.blue.toString(16);
+          }
+          if(this.green <16){
+              gs = "0"+this.green.toString(16);
+          }
+          else{
+              gs = this.green.toString(16);
+          }
+         
+          return('#'+rs+gs+bs);
+          };
+      };
       
       function drawPenExample(canvas,p) {
           var ctx = canvas.getContext('2d');
@@ -30,7 +50,7 @@
             var clone       = document.importNode(template.content, true);
             this.tree.appendChild(clone);
             this.recentPens = new Array(4);
-            this.penProto   = new Pen(10,0,0,0,false);
+            this.penProto   = new Pen(1,0,0,0,false);
       };
       
       
@@ -61,13 +81,12 @@
                 self.penProto.green =   parseInt(self.tree.querySelectorAll("input")[2].value);
                 self.penProto.blue  =   parseInt(self.tree.querySelectorAll("input")[3].value);
                 self.penProto.special  =   self.tree.querySelector("input[type='checkbox']").value;
-               self.tree.querySelector("input[type='text']").value= self.penProto.getColor();
                drawPenExample(canv,self.penProto);
                self.dispatchEvent(new Event("newPen"));
              }
            for(var i =0; i<4; i++){
              //Bei Allen Reglern Darauf reagieren
-             self.tree.querySelectorAll("input")[i].addEventListener("change",modifyPenProto.bind(this));
+             self.tree.querySelectorAll("input")[i].addEventListener("input",modifyPenProto.bind(this));
            
            }
            
