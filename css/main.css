@@ -229,6 +229,11 @@ body {
 
 .newForm {
   padding: 20px; }
+  .newForm #sizeButtons {
+    border: #2196F3 1px solid; }
+    .newForm #sizeButtons input, .newForm #sizeButtons #closeMenu x-flyout div a, #closeMenu x-flyout div .newForm #sizeButtons a {
+      border-radius: 0px;
+      text-align: center; }
   .newForm div {
     display: flex;
     width: 100%;

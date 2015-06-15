@@ -102,22 +102,38 @@ window.addEventListener("load", function () {
 			});
 	}
 
-	//EventHandler für den "Erstellen" Knopf des "neu" dialogs
+//EventHandler für den "Erstellen" Knopf des "neu" dialogs
 	document.querySelector("#createCanvas").addEventListener("click", function (e) {
 		//Formular auslesen
 		var x = document.querySelectorAll(".newForm div input");
-
 		var name	 = x[0].value;
-		var breite 	 = x[1].value;
-		var hohe 	 = x[2].value;
-		var bg 		 = x[3].value;
-		var username = x[4].value;
+		var breite 	 = x[4].value;
+		var hohe 	 = x[5].value;
+		var bg 		 = x[6].value;
+		var username = x[7].value;
 		//Im Netzwerk einen Neuen Raum erstellen
 		network.createRoom(name, username, breite, hohe, bg);
 
 		initXDraw();
 		hideCreateUI(true);
 	}.bind(this));
+
+	function changeSizePreset(event) {
+		var w; 
+		var h;
+		if		(event.target.value =="min"){w= 300; h=300;}
+		else if (event.target.value =="medium"){w= 500; h=500;}
+		else if (event.target.value =="max"){w= 800; h=800;}
+		
+		var x = document.querySelectorAll(".newForm div input");
+		x[4].value =w; //Breite Im Formular
+		x[5].value =h; //Höhe
+		
+	};
+	
+	for(var i =0; i<document.querySelectorAll("#sizeButtons input").length;i++){
+		document.querySelectorAll("#sizeButtons input")[i].addEventListener("click",changeSizePreset);
+	}
 
 
 
@@ -228,6 +244,7 @@ document.querySelector("#pause").addEventListener("click",function() {
 			"time"		: draw.paintstack[i].time,
 			"xPoints"	: JSON.stringify(draw.paintstack[i].xPoints),
 			"yPoints"	: JSON.stringify(draw.paintstack[i].yPoints)
+			
 		};
 
 	}
@@ -235,6 +252,7 @@ document.querySelector("#pause").addEventListener("click",function() {
 				
 	var picture = {
 		"paintstack" : JSON.stringify(ps),
+		"pens"		: JSON.stringify(penEditor.recentPens.slice(0,4)),
 		"width": roomElement.getAttribute("width"),
 		"height": roomElement.getAttribute("height"),
 		"color": roomElement.getAttribute("color"),
@@ -252,6 +270,12 @@ document.querySelector("#resume").addEventListener("click",function() {
 		var settings = JSON.parse( localStorage["latestStack"]);
 		var tempstack = JSON.parse(settings.paintstack);
 		var paintstack = new Array(tempstack.length);
+		var pens 		= JSON.parse(settings.pens);
+		
+		for(var i in pens){
+			penEditor.savePen(pens[i]);
+		}
+		
 		
 		for(var i in tempstack){
 			paintstack[i]= {
@@ -269,8 +293,7 @@ document.querySelector("#resume").addEventListener("click",function() {
 		initXDraw();
 		draw.paintstack = paintstack;
 		hideCreateUI(true);
-		//TODO: Stife sichern und wiederherstellen
-		
+
 }.bind(this));
 
 

@@ -80,7 +80,7 @@
                 self.penProto.red   =   parseInt(self.tree.querySelectorAll("input")[1].value);
                 self.penProto.green =   parseInt(self.tree.querySelectorAll("input")[2].value);
                 self.penProto.blue  =   parseInt(self.tree.querySelectorAll("input")[3].value);
-                self.penProto.special  =   self.tree.querySelector("input[type='checkbox']").value;
+                self.penProto.special  =   self.tree.querySelector("input[type='checkbox']").checked;
                drawPenExample(canv,self.penProto);
                self.dispatchEvent(new Event("newPen"));
              }

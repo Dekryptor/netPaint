@@ -50,6 +50,14 @@ body{
   input[type='button'] {
       @extend .textbutton;
   }
+  
+  #sizeButtons{
+    border: $color-accent 1px solid;
+    input{
+      border-radius: 0px;
+      text-align: center;
+    }
+  } 
    
 
   div{
