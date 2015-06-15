@@ -115,13 +115,26 @@
             for (var i = 0; i < this.paintstack.length; i++) {
                 //Painstack Malen
                 ctx.strokeStyle = paintstack[i].color;
+               
+                
                 ctx.lineWidth = paintstack[i].size;
                 ctx.beginPath();
                 ctx.moveTo(paintstack[i].xPoints[0], paintstack[i].yPoints[0]);
                 for (var x = 1; x < paintstack[i].xPoints.length; x++) {
                     ctx.lineTo(paintstack[i].xPoints[x], paintstack[i].yPoints[x]);
                 }
-                ctx.stroke();
+                
+                
+                 if(paintstack[i].special){
+                   ctx.fillStyle = paintstack[i].color;
+                   ctx.fill();
+                }
+                else{
+                   ctx.stroke();
+                }
+                
+                
+                
                 ctx.closePath();
             }
   

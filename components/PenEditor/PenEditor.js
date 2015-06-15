@@ -104,7 +104,7 @@
              self.tree.querySelectorAll("input")[1].value = p.red.toString();
              self.tree.querySelectorAll("input")[2].value = p.green.toString();
              self.tree.querySelectorAll("input")[3].value = p.blue.toString();
-             self.tree.querySelector("input[type='checkbox']").value = p.special;
+             self.tree.querySelector("input[type='checkbox']").checked = p.special;
              drawPenExample(canv,self.penProto);
            }
            
