@@ -115,6 +115,7 @@ window.addEventListener("load", function () {
 		network.addEventListener("undo", function (msg) {
 			//Undo Nachrricht bekommen
 			console.log("undo:" + msg.detail);
+			draw.undo(msg.detail);
 		}.bind(this));
 		//Löschen Eventhandler
 		document.querySelector("#delete").addEventListener("click", function () {
