@@ -88,13 +88,13 @@ window.addEventListener("load", function () {
 		var roomElement = document.querySelector("x-room");
 		var breite = roomElement.getAttribute("width");
 		var hohe = roomElement.getAttribute("height");
-		var bg = roomElement.getAttribute("color");
+		var background = roomElement.getAttribute("color");
 		
 		//Neues x-Draw Element erstellen
 		draw = document.createElement("x-draw");
 		draw.setAttribute("width", breite);
 		draw.setAttribute("height", hohe);
-		draw.setAttribute("bg-color", bg);
+		draw.setAttribute("bg-color", background);
 		
 		//Ins Dokument Einfügen und an Eventhandler Binden
 		container.appendChild(draw);
@@ -261,7 +261,7 @@ window.addEventListener("load", function () {
 
 	//Der Programmteil für die "Close-UI"
 	function closeDraw() {
-		//Schließt das Canvas und stellt die Verschlüsselung auf Standart zurück
+		//Schließt das Canvas und stellt die Verschlüsselung auf Standard zurück
 		var container = document.querySelector(".container");
 		while (container.hasChildNodes()) {
 			container.removeChild(container.firstChild);
