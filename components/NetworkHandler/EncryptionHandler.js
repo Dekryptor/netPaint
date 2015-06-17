@@ -1,10 +1,4 @@
-/// <reference path="definitions/textencoder.ts"/>
-var __extends = this.__extends || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
-};
+
 var EncryptionHandler = (function () {
     function EncryptionHandler(keydata, initVektor) {
         var self = this;
@@ -98,11 +92,4 @@ var EncryptionHandler = (function () {
     };
     return EncryptionHandler;
 })();
-var defaultEncryptionHandler = (function (_super) {
-    __extends(defaultEncryptionHandler, _super);
-    function defaultEncryptionHandler() {
-        var vek = new Uint8Array([38, 86, 215, 184, 230, 210, 185, 187, 139, 141, 157, 192, 67, 41, 251, 58]);
-        _super.call(this, "none", vek);
-    }
-    return defaultEncryptionHandler;
-})(EncryptionHandler);
+

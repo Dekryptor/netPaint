@@ -296,13 +296,15 @@ window.addEventListener("load", function () {
 
 
 	document.querySelector("#resume").addEventListener("click", function () {
-		//Läd ein altes Bild inkl Einstellungen wieder zum bearbeiten.
-		var picture = JSON.parse(localStorage["lastPicture"]);
-		var setting = JSON.parse(picture.settings);
-		network.createRoom(setting.name, "admin", setting.width, setting.height, setting.color);
-		initXDraw();
-		draw.fromString(picture.paintstack);
-		hideCreateUI(true);
+		//Läd ein altes Bild inkl Einstellungen wieder zum bearbeiten, wenn eins verfügbar ist.
+			if (localStorage["lastPicture"]) {
+				var picture = JSON.parse(localStorage["lastPicture"]);
+				var setting = JSON.parse(picture.settings);
+				network.createRoom(setting.name, "admin", setting.width, setting.height, setting.color);
+				initXDraw();
+				draw.fromString(picture.paintstack);
+				hideCreateUI(true);
+			}
 
 	}.bind(this));
 
@@ -311,6 +313,7 @@ window.addEventListener("load", function () {
 
 	//Den Einstellung-sichern button auswählen und einen Eventhandler anfügen
 	document.querySelectorAll("#settingsMenu input[type='button']")[0].addEventListener("click", function (e) {
+			//Einstellung Speichern Button
 			//Aktuellen Einstellungen Besorgen	
 			var setting =getSettings();
 			var settingname = document.querySelectorAll("#settingsMenu input[type='text']")[0].value;
@@ -319,7 +322,7 @@ window.addEventListener("load", function () {
 	});
 
 	document.querySelectorAll("#settingsMenu input[type='button']")[1].addEventListener("click", function (e) {
-		//Löschen Button.
+		//Einstellung Löschen Button.
 		var selectElement = document.querySelector("#settingsMenu select");
 		var selectedSetting = selectElement.value;
 		delete settingStore[selectedSetting];
@@ -327,7 +330,7 @@ window.addEventListener("load", function () {
 	});
 	
 	document.querySelectorAll("#settingsMenu input[type='button']")[2].addEventListener("click", function (e) {
-		//Laden Button.
+		//Einstellung Laden Button.
 		var selectElement = document.querySelector("#settingsMenu select");
 		var selectedSetting = selectElement.value;
 		var setting = settingStore[selectedSetting];
@@ -361,16 +364,18 @@ Object.observe(settingStore, function (changes) {
 
 
 (function(){
-	//Settings laden
-	var localSettingStore = JSON.parse(localStorage["settingStore"]);
-	for (var i in localSettingStore) {
-		settingStore[i] = localSettingStore[i];
-	}
-
-	//Letzte Einstellung Laden
-	var latestSetting = localStorage["latestSetting"];
-	if(settingStore[latestSetting]){
-		setSettings(settingStore[latestSetting]);
+	//Settings laden wenn ein SettingStore Vorhanden ist
+	if(localStorage["settingStore"]){
+		var localSettingStore = JSON.parse(localStorage["settingStore"]);
+		for (var i in localSettingStore) {
+			settingStore[i] = localSettingStore[i];
+		}
+	
+		//Letzte Einstellung Laden wenn die Vorhanden ist
+		var latestSetting = localStorage["latestSetting"];
+		if(settingStore[latestSetting]){
+			setSettings(settingStore[latestSetting]);
+		}
 	}
 })();
 	

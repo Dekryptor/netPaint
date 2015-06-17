@@ -1,17 +1,19 @@
 <!Doctype html>
 <html>
 	<head>
-		<title>Netpaint 0.1</title>
+		<title>Netpaint 1.0</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<!-- Include all the Libs and CSS Files. Done by Grunt with <3 -->
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	
+		<!--Automatisch mit Grunt erstellt-->
 		<link href="css/main.css" rel="stylesheet" type="text/css">
 		<link rel="import" href="components/compiled.html" />
-		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-	</head>
+		</head>
 	<body>
 		<x-menu>
 			<button class="button hidden" id="closeMenu">
+				<!--Schließen Button-->
 				<i class="material-icons">clear</i>
 				<x-flyout class="hidden">
 					<h1>Bild Schließen</h1>
@@ -28,6 +30,7 @@
 			</button>
 			
 			<button class="button" id="newMenu">
+				<!--Neues-Bild Button-->
 				<i class="material-icons">add</i>
 				<x-flyout>
 					<h1>Neues Bild</h1>
@@ -64,6 +67,7 @@
 				</x-flyout>
 			</button>
 			<button class="button" id="openMenu">
+				<!--Bild Öffnen Button-->
 				<i class="material-icons">input</i>
 				<x-flyout class="hidden">
 					<h1>Bild Öffnen</h1>
@@ -93,6 +97,7 @@
 				<i class="material-icons">undo</i>
 			</button>
 			<button class="button">
+				<!--Stift Anpassen Button-->
 				<i class="material-icons">brush</i>
 				<x-flyout class="hidden">
 					<h1>Stift anpassen</h1>
@@ -100,6 +105,7 @@
 				</x-flyout>
 			</button>
 			<button class="button">
+				<!--Einstellungen Button-->
 				<i class="material-icons">menu</i>
 				<x-flyout class="hidden">
 					<h1>Einstellungen</h1>
@@ -120,7 +126,7 @@
 			</button>
 		</x-menu>
 		<div class="container">
-			
+			<!-- Hier landet X-Draw -->
 		</div>
 		<!-- App Entrypoint -->
 		<x-network url="ws://borsti1.inf.fh-flensburg.de:8080"></x-network>
